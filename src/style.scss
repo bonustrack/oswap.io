@@ -1,0 +1,182 @@
+@import '~@vue/ui/dist/vue-ui.css';
+@import "~primer-support/index.scss";
+@import "~//at.alicdn.com/t/font_1685988_yw28u7sav4m.css";
+
+$primary: #1500ff;
+$secondary: #bbffff;
+
+$body-font: 'Calibre-Medium', Helvetica, Arial, sans-serif;
+$font-mktg: 'Calibre-Semibold', Helvetica, Arial, sans-serif;
+$body-font-size: 20px;
+$border-radius: 12px;
+$h1-size: 42px;
+$black: #131519;
+
+@import '~@primer/css/index.scss';
+
+html, body, #app {
+  background-color: $black;
+}
+
+@font-face {
+  font-family: 'Calibre-Medium';
+  src: url('./assets/fonts/Calibre-Medium.eot');
+  src: url('./assets/fonts/Calibre-Medium.eot?#iefix') format('embedded-opentype'),
+  url('./assets/fonts/Calibre-Medium.woff') format('woff'),
+  url('./assets/fonts/Calibre-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Calibre-Semibold';
+  src: url('./assets/fonts/Calibre-Semibold.eot');
+  src: url('./assets/fonts/Calibre-Semibold.eot?#iefix') format('embedded-opentype'),
+  url('./assets/fonts/Calibre-Semibold.woff') format('woff'),
+  url('./assets/fonts/Calibre-Semibold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+a {
+  cursor: pointer;
+  color: white;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+h1, h2, h3 {
+  font-family: $font-mktg;
+  font-weight: normal;
+}
+
+#app {
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  outline: none;
+  color: $gray-600;
+  font-family: $body-font;
+  font-weight: normal;
+  font-size: 20px;
+}
+
+label {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.input-amount {
+  box-shadow: none !important;
+  background: transparent;
+  font-size: 42px;
+  color: white;
+  width: 100%;
+
+  &:focus, &:hover, &:active {
+    outline: none;
+    box-shadow: none  !important;
+  }
+}
+
+::placeholder {
+  color: $gray-600;
+}
+
+.btn-mktg {
+  background: $gray-600;
+  border-color: transparent;
+  font-size: 20px;
+  height: 46px;
+  line-height: 46px;
+  border-radius: 24px;
+  padding: 0 24px;
+  font-family: $body-font;
+  font-weight: normal;
+
+  &:hover, &:focus {
+    background: $gray-600;
+    border-color: transparent;
+    box-shadow: none !important;
+  }
+}
+
+.btn-outline-mktg {
+  background: transparent !important;
+  border-color: $gray-600;
+  color: $gray-600;
+
+  &:hover {
+    background: transparent;
+    color: $white;
+    border-color: $white;
+  }
+}
+
+.btn-submit {
+  height: 46px;
+  line-height: 48px;
+  color: white;
+  background-color: $primary;
+  outline: none;
+  border: none;
+  width: 100%;
+  max-width: 260px;
+
+  &:disabled {
+    background-color: $gray-600;
+    cursor: not-allowed;
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $gray-600;
+  border: 0;
+  background-clip: padding-box;
+
+  &:hover {
+    background-color: transparentize($gray-600, 0.2);
+  }
+}
+
+.vue-ui-loading-indicator {
+  background-color: transparent !important;
+
+  .animation {
+    border-color: transparentize(white, 0.8);
+    border-width: 4px !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-right-color: white;
+  }
+}
+
+#nav {
+  a {
+    height: 46px;
+    line-height: 48px;
+    text-decoration: none;
+    color: $gray-600;
+
+    &.router-link-exact-active {
+      color: white;
+      background-color: $primary;
+    }
+  }
+}
+
+.box {
+  @extend .bg-gray-9;
+  @extend .p-4;
+  @extend .clearfix;
+  @extend .rounded-2;
+  @extend .mb-4
+}
+
+.highlight {
+  &:hover {
+    background-color: $gray-800;
+  }
+}

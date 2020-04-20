@@ -1,0 +1,21 @@
+[
+  {
+    "symbol": "GBYTE",
+    "short": "GB",
+    "decimals": 9
+  },
+  {
+    "symbol": "MBYTE",
+    "short": "MB",
+    "decimals": 6
+  },
+  {
+    "symbol": "KBYTE",
+    "short": "KB",
+    "decimals": 3
+  },
+  {
+    "symbol": "BYTE",
+    "decimals": 0
+  }
+]
