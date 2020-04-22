@@ -95,7 +95,7 @@ export function generateCreateUri(assetA, assetB) {
   return generateUri(FACTORY_ADDRESS, data);
 }
 
-export function generateUri(address, data, amount?, asset?) {
+export function generateUri(address, data, amount = 1e4, asset?) {
   let uri = `obyte-tn:${address}`;
   const json = JSON.stringify(data);
   const b64 = encodeURIComponent(Buffer.from(json).toString('base64'));

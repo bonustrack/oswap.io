@@ -5,6 +5,7 @@
       <template v-else>Select<span class="hide-sm"> a token</span></template>
     </a>
     <ModalSelectToken
+      :values="values"
       :not="not"
       :open="modalOpen"
       @close="modalOpen = false"
@@ -15,7 +16,7 @@
 
 <script>
 export default {
-  props: ['value', 'default', 'not'],
+  props: ['value', 'default', 'not', 'values'],
   data() {
     return {
       input: null,

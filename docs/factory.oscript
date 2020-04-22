@@ -1,0 +1,87 @@
+{
+	doc_url: 'https://testnet.oswap.io/factory.json',
+	init: `{
+		$base = 'AV6IIJ567NKMJGHIBGKEYTQLBW4ATUUT';
+		$address = trigger.data.address;
+		$asset0 = trigger.data.asset0;
+		$asset1 = trigger.data.asset1;
+	}`,
+	messages: {
+		cases: [
+			{ // create
+				if: `{trigger.data.create AND $asset0 AND $asset1 AND trigger.output[[asset=base]] == 1e4}`,
+				init: `{
+					if ($asset0 == $asset1) bounce('identical asset');
+					if (number_from_seed($asset1) >= number_from_seed($asset0)) bounce('wrong asset order');
+					if (var['all_pairs.' || $asset0 || '_' || $asset1]) bounce('pair exists');
+					if (
+						!asset[$asset0].exists
+						OR asset[$asset0].is_private
+						OR !asset[$asset0].is_transferrable
+						OR asset[$asset0].fixed_denominations
+						OR !asset[$asset1].exists
+						OR asset[$asset1].is_private
+						OR !asset[$asset1].is_transferrable
+						OR asset[$asset1].fixed_denominations
+					)
+						bounce('invalid asset');
+				}`,
+				messages: [
+					{
+						app: 'definition',
+						payload: {
+							definition: [
+								'autonomous agent',
+								{
+									base_aa: `{$base}`,
+									params: {
+										factory: `{this_address}`,
+										asset0: `{$asset0}`,
+										asset1: `{$asset1}`
+									}
+								}
+							]
+						}
+					},
+					{
+						app: 'payment',
+						payload: {
+							asset: 'base',
+							outputs: [
+								{ address: '{$address}', amount: '{5e3}' }
+							]
+						}
+					},
+					{
+						app: 'data',
+						payload: { initialize: '1' }
+					},
+					{
+						app: 'state',
+						state: `{
+							if ($address != unit[response_unit].messages[[.app='definition']].payload.address)
+								bounce('wrong address');
+							var['all_pairs.' || $asset0 || '_' || $asset1] = $address;
+							var['all_pairs.' || $asset1 || '_' || $asset0] = $address;
+							var['get_pair.' || $address] = $asset0 || '_' || $asset1;
+							var['pair_count'] += 1;
+							response['type'] = 'create';
+						}`
+					}
+				]
+			},
+			{ // finalize
+				if: `{trigger.data.finalize AND var['get_pair.' || trigger.address]}`,
+				messages: [
+					{
+						app: 'state',
+						state: `{
+							var['get_asset.' || trigger.address] = trigger.unit;
+							response['type'] = 'finalize';
+						}`
+					}
+				]
+			}
+		]
+	}
+}

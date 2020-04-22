@@ -1,6 +1,6 @@
 <template>
   <span>
-    <a class="btn-mktg" @click="modalOpen = true">
+    <a :class="customClass || 'btn-mktg'" @click="modalOpen = true">
       <Ticker v-if="input" :asset="input" />
       <template v-else>Select<span class="hide-sm"> a pair</span></template>
     </a>
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  props: ['value', 'default'],
+  props: ['value', 'default', 'customClass'],
   data() {
     return {
       input: null,

@@ -1,0 +1,203 @@
+{
+  doc_url: 'https://testnet.oswap.io/pair.json',
+	init: '{
+		$bounceFees = 1e4;
+		$minLiquidity = 1e3;
+		$factory = params.factory;
+		$asset0 = params.asset0;
+		$asset1 = params.asset1;
+		$asset = var[$factory]['get_asset.' || this_address];
+		$supply = var['supply'];
+		$amount0 = trigger.output[[asset=$asset0]];
+		$amount1 = trigger.output[[asset=$asset1]];
+		$amount0NoFees = ($asset0 == 'base') ? $amount0 - $bounceFees : $amount0;
+		$amount1NoFees = ($asset1 == 'base') ? $amount1 - $bounceFees : $amount1;
+		$reserve0 = balance[$asset0] - $amount0;
+		$reserve1 = balance[$asset1] - $amount1;
+		if (trigger.data.to AND !is_valid_address(trigger.data.to)) bounce('invalid recipient address');
+		if (trigger.data.to_aa AND !is_aa(trigger.data.to_aa)) bounce('invalid aa address');
+		$to = trigger.data.to OTHERWISE trigger.initial_address;
+		$toAA = trigger.data.to_aa;
+		$deadline = trigger.data.deadline;
+		if ($deadline AND $deadline < timestamp) bounce('expired');
+	}',
+  messages: {
+    cases: [
+			{ // info
+				if: '{trigger.data.info}',
+				messages: [
+					{
+						app: 'state',
+						state: '{
+							response['factory'] = $factory;
+							response['asset0'] = $asset0;
+							response['asset1'] = $asset1;
+							response['reserve0'] = $reserve0;
+							response['reserve1'] = $reserve1;
+							response['asset'] = $asset;
+							response['supply'] = $supply;
+						}'
+					}
+				]
+			},
+      { // initialize
+        if: '{!$asset AND trigger.data.initialize AND trigger.address == $factory}',
+        messages: [
+          {
+            app: 'asset',
+            payload: {
+              is_private: false,
+              is_transferrable: true,
+              auto_destroy: false,
+              fixed_denominations: false,
+              issued_by_definer_only: true,
+              cosigned_by_definer: false,
+              spender_attested: false,
+            }
+          },
+					{
+						app: 'payment',
+						payload: {
+							asset: 'base',
+							outputs: [
+								{ address: '{$factory}' }
+							]
+						}
+					},
+					{
+						app: 'data',
+						payload: { finalize: '1' }
+					},
+					{
+						app: 'state',
+						state: '{response['type'] = 'initialize';}'
+					}
+        ]
+      },
+			{ // mint
+				if: '{
+					$both = ($amount0NoFees > 0 AND $amount1NoFees > 0 AND ($amount0NoFees * $amount1NoFees) >= $minLiquidity);
+					$asset0Only = ($amount0NoFees > $minLiquidity AND $amount1NoFees <= 0);
+					$asset1Only = ($amount1NoFees > $minLiquidity AND $amount0NoFees <= 0);
+					$asset AND ($both OR trigger.data.mint AND ($asset0Only OR $asset1Only))
+				}',
+				init: '{
+					if ($reserve1 == 0 OR $reserve0 == 0) {
+						if (!$both) bounce('initial contribution must have both tokens');
+						$minted = balance[$asset0];
+						return;
+					}
+					if ($both) {
+						$ratio = $reserve1 / $reserve0;
+						$expectedAmount1 = round($ratio * $amount0);
+						if ($expectedAmount1 != $amount1)
+							bounce('wrong ratio of amounts, expected ' || $expectedAmount1 || ' of ' || $asset1);
+						$share = $amount0 / $reserve0;
+					} else if ($asset0Only) {
+						$share = sqrt(1 + $amount0 / $reserve0) - 1;
+					} else if ($asset1Only) {
+						$share = sqrt(1 + $amount1 / $reserve1) - 1;
+					}
+					$minted = round($share * $supply);
+				}',
+				messages: [
+					{
+						app: 'payment',
+						payload: {
+							asset: '{$asset}',
+							outputs: [
+								{ address: '{$to}', amount: '{$minted}' }
+							]
+						}
+					},
+					{
+						app: 'state',
+						state: '{
+							var['supply'] += $minted;
+							response['type'] = 'mint';
+							response['asset_amount'] = $minted;
+						}'
+					}
+				]
+			},
+			{ // burn
+				if: '{$asset AND trigger.output[[asset=$asset]]}',
+				init: '{
+					$burned = trigger.output[[asset=$asset]];
+					$share = $burned / $supply;
+					$minted0 = round($share * $reserve0);
+					$minted1 = round($share * $reserve1);
+				}',
+				messages: [
+					{
+						app: 'payment',
+						payload: {
+							asset: '{$asset0}',
+							outputs: [
+								{ address: '{$to}', amount: '{$minted0}' }
+							]
+						}
+					},
+					{
+						app: 'payment',
+						payload: {
+							asset: '{$asset1}',
+							outputs: [
+								{ address: '{$to}', amount: '{$minted1}' }
+							]
+						}
+					},
+					{
+						app: 'state',
+						state: '{
+							var['supply'] -= $burned;
+							response['type'] = 'burn';
+							response['asset0_amount'] = $minted0;
+							response['asset1_amount'] = $minted1;
+						}'
+					}
+				]
+			},
+			{ // swap
+				if: '{
+					$asset0ToAsset1 = ($amount0NoFees > 0 AND $amount1NoFees <= 0);
+					$asset1ToAsset0 = ($amount1NoFees > 0 AND $amount0NoFees <= 0);
+					$asset AND $supply AND ($asset0ToAsset1 OR $asset1ToAsset0)
+				}',
+				init: '{
+					$amountOutMin = trigger.data.amount_out_min;
+					$in = $asset0ToAsset1 ? '0' : '1';
+					$out = $asset0ToAsset1 ? '1' : '0';
+					$numerator = ${'amount' || $in} * ${'reserve' || $out} * 997;
+					$denominator = ${'reserve' || $in} * 1000 + ${'amount' || $in} * 997;
+					$amount = round($numerator / $denominator);
+					if ($amountOutMin AND $amount < $amountOutMin) bounce('insufficient output amount');
+					$address = $toAA ? $toAA : $to;
+				}',
+				messages: [
+					{
+						app: 'payment',
+						payload: {
+							asset: '{${'asset' || $out}}',
+							outputs: [
+								{ address: '{$address}', amount: '{$amount}' }
+							]
+						}
+					},
+					{
+						if: '{$toAA}',
+						app: 'data',
+						payload: { to: '{$to}' }
+					},
+					{
+						app: 'state',
+						state: '{
+							response['type'] = 'swap';
+							response['asset' || $out || '_amount'] = $amount;
+						}'
+					}
+				]
+			}
+    ]
+  }
+}

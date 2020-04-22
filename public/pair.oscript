@@ -21,8 +21,8 @@
 		$deadline = trigger.data.deadline;
 		if ($deadline AND $deadline < timestamp) bounce('expired');
 	}',
-    messages: {
-        cases: [
+  messages: {
+    cases: [
 			{ // info
 				if: '{trigger.data.info}',
 				messages: [
@@ -55,43 +55,50 @@
               spender_attested: false,
             }
           },
-        {
-          app: 'payment',
-          payload: {
-            asset: 'base',
-            outputs: [
-              { address: '{$factory}' }
-            ]
-          }
-        },
-        {
-          app: 'data',
-          payload: { finalize: '1' }
-        },
-        {
-          app: 'state',
-          state: '{response['type'] = 'initialize';}'
-        }
+					{
+						app: 'payment',
+						payload: {
+							asset: 'base',
+							outputs: [
+								{ address: '{$factory}' }
+							]
+						}
+					},
+					{
+						app: 'data',
+						payload: { finalize: '1' }
+					},
+					{
+						app: 'state',
+						state: '{response['type'] = 'initialize';}'
+					}
         ]
       },
 			{ // mint
 				if: '{
-					$asset
-					AND $amount0NoFees > 0
-					AND $amount1NoFees > 0
-					AND ($amount0NoFees * $amount1NoFees) >= $minLiquidity
+					$both = ($amount0NoFees > 0 AND $amount1NoFees > 0 AND ($amount0NoFees * $amount1NoFees) >= $minLiquidity);
+					$asset0Only = ($amount0NoFees > $minLiquidity AND $amount1NoFees <= 0);
+					$asset1Only = ($amount1NoFees > $minLiquidity AND $amount0NoFees <= 0);
+					$asset AND ($both OR trigger.data.mint AND ($asset0Only OR $asset1Only))
 				}',
 				init: '{
 					if ($reserve1 == 0 OR $reserve0 == 0) {
+						if (!$both) bounce('initial contribution must have both tokens');
 						$minted = balance[$asset0];
 						return;
 					}
-					$ratio = $reserve1 / $reserve0;
-					$expectedAmount1 = round($ratio * $amount0);
-					if ($expectedAmount1 != $amount1)
-						bounce('wrong ratio of amounts, expected ' || $expectedAmount1 || ' of ' || $asset1);
-					$investorShare = $amount0 / $reserve0;
-					$minted = round($investorShare * $supply);
+					if ($both) {
+						$ratio = $reserve1 / $reserve0;
+						$expectedAmount1 = round($ratio * $amount0);
+						if ($expectedAmount1 != $amount1)
+							bounce('wrong ratio of amounts, expected ' || $expectedAmount1 || ' of ' || $asset1);
+						$share = $amount0 / $reserve0;
+					} else if ($asset0Only) {
+						$share = sqrt(1 + $amount0 / $reserve0) - 1;
+					} else if ($asset1Only) {
+						$share = sqrt(1 + $amount1 / $reserve1) - 1;
+					}
+					$minted = round($share * $supply);
 				}',
 				messages: [
 					{

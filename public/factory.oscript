@@ -1,7 +1,7 @@
 {
 	doc_url: 'https://testnet.oswap.io/factory.json',
 	init: `{
-		$base = 'EJVA2PEIUE2P25GSYT5V3JWSYLGFOJT2';
+		$base = 'AV6IIJ567NKMJGHIBGKEYTQLBW4ATUUT';
 		$address = trigger.data.address;
 		$asset0 = trigger.data.asset0;
 		$asset1 = trigger.data.asset1;

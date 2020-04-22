@@ -1,7 +1,7 @@
 <template>
   <div>
     <VueLoadingIndicator v-if="isLoading" class="overlay big" />
-    <div id="app" class="pb-4" v-else>
+    <div id="app" class="pb-6" v-else>
       <Nav />
       <router-view />
     </div>

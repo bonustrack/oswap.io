@@ -77,7 +77,8 @@ export default {
       outputAsset: '',
       inputAmount: '',
       outputAmount: '',
-      to: this.$route.query.to
+      to: this.$route.query.to,
+      rate: 0
     };
   },
   watch: {
@@ -94,18 +95,22 @@ export default {
       }
     }
   },
-  computed: {
-    rate() {
-      if (!this.inputAsset || !this.outputAsset) return;
+  methods: {
+    updateRate() {
+      if (!this.inputAsset || !this.outputAsset) {
+        this.rate = 0;
+        return;
+      }
       const { assets } = this.$store.state.settings;
       const inputAmount = toString(this.inputAmount, assets[this.inputAsset].decimals);
       const outputAmount = toString(this.outputAmount, assets[this.outputAsset].decimals);
       const rate = parseFloat((inputAmount / outputAmount).toFixed(6));
-      if (rate <= 0 || rate === Infinity) return;
-      return rate;
-    }
-  },
-  methods: {
+      if (rate <= 0 || rate === Infinity) {
+        this.rate = 0;
+        return;
+      }
+      this.rate = rate;
+    },
     selectAmount(amount) {
       this.inputAmount = amount;
       this.updateOutputAmount();
@@ -132,9 +137,11 @@ export default {
     },
     updateOutputAmount() {
       if (this.inputAmount) this.outputAmount = this.trade.getAmountBought(this.inputAmount) || '';
+      this.updateRate();
     },
     updateInputAmount() {
       if (this.outputAmount) this.inputAmount = this.trade.getAmountSold(this.outputAmount) || '';
+      this.updateRate();
     }
   }
 };

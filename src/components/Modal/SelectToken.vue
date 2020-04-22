@@ -37,7 +37,7 @@
 import { getBalance } from '@/helpers/_oswap';
 
 export default {
-  props: ['open', 'not'],
+  props: ['open', 'not', 'values'],
   data() {
     return {
       query: ''
@@ -48,7 +48,11 @@ export default {
       const assets = {};
       Object.entries(this.$store.state.settings.assets).forEach(asset => {
         const str = `${asset[1].symbol}-${asset[0]}`;
-        if (str.toLowerCase().includes(this.query.toLowerCase()) && asset[0] !== this.not)
+        if (
+          str.toLowerCase().includes(this.query.toLowerCase()) &&
+          asset[0] !== this.not &&
+          (!this.values || this.values.includes(asset[0]))
+        )
           assets[asset[0]] = asset[1];
       });
       return assets;

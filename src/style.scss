@@ -1,6 +1,6 @@
 @import '~@vue/ui/dist/vue-ui.css';
 @import "~primer-support/index.scss";
-@import "~//at.alicdn.com/t/font_1685988_yw28u7sav4m.css";
+@import "~//at.alicdn.com/t/font_1685988_fa6cqqpcxcq.css";
 
 $primary: #1500ff;
 $secondary: #bbffff;
@@ -39,7 +39,7 @@ html, body, #app {
 }
 
 a {
-  cursor: pointer;
+  cursor: pointer !important;
   color: white;
 
   &:hover {
@@ -47,9 +47,15 @@ a {
   }
 }
 
-h1, h2, h3 {
+h1, h3 {
   font-family: $font-mktg;
   font-weight: normal;
+}
+
+h2, .h2 {
+  font-family: $font-mktg !important;
+  font-size: 22px !important;
+  font-weight: normal !important;
 }
 
 #app {
@@ -86,6 +92,7 @@ label {
 }
 
 .btn-mktg {
+  cursor: default;
   background: $gray-600;
   border-color: transparent;
   font-size: 20px;

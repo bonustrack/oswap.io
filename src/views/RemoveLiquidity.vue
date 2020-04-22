@@ -1,6 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <div class="container-sm px-3">
+      <PoolNav :default="2" />
       <Box class="d-flex">
         <div class="flex-auto">
           <label for="inputAmount" class="d-block">
@@ -32,7 +33,6 @@
         >
           Remove liquidity
         </button>
-        <p>Or, <router-link to="/add-liquidity">add liquidity</router-link></p>
       </div>
     </div>
   </form>
