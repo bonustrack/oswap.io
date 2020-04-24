@@ -3,7 +3,7 @@
     <VueLoadingIndicator v-if="isLoading" class="overlay big" />
     <div id="app" class="pb-6" v-else>
       <Nav />
-      <router-view />
+      <router-view :key="$route.path" />
     </div>
   </div>
 </template>

@@ -6,14 +6,19 @@
         <label class="d-block">Pool</label>
         <ButtonSelectPair customClass="h2 d-block" v-model="id" />
         <div v-if="pair">
-          <label class="d-block">
-            Current pool size
-          </label>
+          <label class="d-block">Current pool size</label>
           <a :href="`https://testnetexplorer.obyte.org/#${pair.address}`" target="_blank">
             <Amount :value="pair.reserve0" :asset="pair.asset0" /> <Ticker :asset="pair.asset0" /> +
             <Amount :value="pair.reserve1" :asset="pair.asset1" /> <Ticker :asset="pair.asset1" />
             <Icon name="external-link" class="ml-1" size="18" />
           </a>
+        </div>
+        <div v-if="share">
+          <label class="d-block">Your pool share</label>
+          <span class="text-white">
+            <Pie v-if="share > 1" class="mr-2" :percent="share" />
+            {{ share }}%
+          </span>
         </div>
       </Box>
       <Box v-if="pair.asset0 && pair.reserve0 && pair.reserve1" class="d-flex">
@@ -43,7 +48,7 @@
 
 <script>
 import Pair from '@/helpers/_oswap/pair';
-import { generateUri } from '@/helpers/_oswap';
+import { generateUri, getBalance } from '@/helpers/_oswap';
 
 export default {
   data() {
@@ -51,7 +56,8 @@ export default {
       id: false,
       pair: false,
       asset: '',
-      amount: ''
+      amount: '',
+      share: 0
     };
   },
   watch: {
@@ -61,6 +67,8 @@ export default {
         const address = this.$store.state.settings.allPairs[value];
         const pair = new Pair(address, value.split('_'));
         await pair.init();
+        const balance = getBalance(this.$store.state.auth.balances, pair.asset);
+        this.share = parseFloat(((100 / pair.supply) * balance).toFixed(3));
         this.pair = pair;
       }
     }

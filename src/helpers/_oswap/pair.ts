@@ -5,6 +5,7 @@ export default class Pair {
   public address: string;
   public asset0: string;
   public asset1: string;
+  public asset?: string;
   public reserve0?: number;
   public reserve1?: number;
   public supply?: number;
@@ -17,6 +18,7 @@ export default class Pair {
 
   async init() {
     const info = await getInfo(this.address);
+    this.asset = info.asset;
     this.reserve0 = parseInt(info.reserve0);
     this.reserve1 = parseInt(info.reserve1);
     this.supply = parseInt(info.supply);
