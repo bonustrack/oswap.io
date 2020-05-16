@@ -110,7 +110,9 @@ label {
   }
 }
 
-.btn-outline-mktg {
+.btn-outline {
+  @extend .btn-mktg;
+  @extend .btn-outline-mktg;
   background: transparent !important;
   border-color: $gray-600;
   color: $gray-600;
@@ -124,16 +126,17 @@ label {
 
 .btn-submit {
   height: 46px;
-  line-height: 48px;
+  line-height: 46px;
   color: white;
   background-color: $primary;
   outline: none;
-  border: none;
+  border: 1px solid $primary;
   width: 100%;
   max-width: 260px;
 
   &:disabled {
     background-color: $gray-600;
+    border: 1px solid $gray-600;
     cursor: not-allowed;
   }
 }

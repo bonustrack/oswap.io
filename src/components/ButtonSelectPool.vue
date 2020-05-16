@@ -1,10 +1,10 @@
 <template>
   <span>
     <a :class="customClass || 'btn-mktg'" @click="modalOpen = true">
-      <Ticker v-if="input" :asset="input" />
-      <template v-else>Select<span class="hide-sm"> a pair</span></template>
+      <Ticker v-if="input" :asset="ticker" />
+      <template v-else>Select<span class="hide-sm"> a pool</span></template>
     </a>
-    <ModalSelectPair :open="modalOpen" @close="modalOpen = false" @pair="input = $event" />
+    <ModalSelectPool :open="modalOpen" @close="modalOpen = false" @pool="input = $event" />
   </span>
 </template>
 
@@ -23,6 +23,12 @@ export default {
     },
     value(value) {
       this.input = value;
+    }
+  },
+  computed: {
+    ticker() {
+      const pool = this.$store.state.settings.pools[this.input];
+      return `${pool.asset0}_${pool.asset1}`;
     }
   },
   mounted() {

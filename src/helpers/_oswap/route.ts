@@ -1,41 +1,41 @@
-import Pair from './pair';
+import Pool from './pool';
 
 export default class Route {
-  public pairs: [Pair];
+  public pools: [Pool];
 
-  constructor(pairs: [Pair]) {
-    this.pairs = pairs;
+  constructor(pools: [Pool]) {
+    this.pools = pools;
   }
 
   async init() {
-    const promises = this.pairs.map(pair => pair.init());
+    const promises = this.pools.map(pool => pool.init());
     await Promise.all(promises);
   }
 
   hasLiquidity() {
-    this.pairs.forEach(pair => {
-      if (!pair.hasLiquidity()) return false;
+    this.pools.forEach(pool => {
+      if (!pool.hasLiquidity()) return false;
     });
     return true;
   }
 
   getAmountBought(inputAmount, inputAsset) {
     let i = 0;
-    while (this.pairs[i]) {
-      inputAmount = this.pairs[i].getAmountBought(inputAmount, inputAsset);
+    while (this.pools[i]) {
+      inputAmount = this.pools[i].getAmountBought(inputAmount, inputAsset);
       inputAsset =
-        this.pairs[i].asset0 === inputAsset ? this.pairs[i].asset1 : this.pairs[i].asset0;
+        this.pools[i].asset0 === inputAsset ? this.pools[i].asset1 : this.pools[i].asset0;
       i++;
     }
     return inputAmount;
   }
 
   getAmountSold(outputAmount, outputAsset) {
-    let i = this.pairs.length - 1;
-    while (this.pairs[i]) {
-      outputAmount = this.pairs[i].getAmountSold(outputAmount, outputAsset);
+    let i = this.pools.length - 1;
+    while (this.pools[i]) {
+      outputAmount = this.pools[i].getAmountSold(outputAmount, outputAsset);
       outputAsset =
-        this.pairs[i].asset0 === outputAsset ? this.pairs[i].asset1 : this.pairs[i].asset0;
+        this.pools[i].asset0 === outputAsset ? this.pools[i].asset1 : this.pools[i].asset0;
       i--;
     }
     return outputAmount;

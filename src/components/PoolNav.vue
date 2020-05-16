@@ -8,7 +8,7 @@
       <router-link
         v-for="(item, i) in items.filter((item, i) => i !== current)"
         :key="i"
-        :to="item.to"
+        :to="{ name: item.to }"
         class="d-block"
       >
         <h2 v-text="item.name" class="mt-2" />
@@ -25,9 +25,10 @@ export default {
       open: false,
       current: this.default || 0,
       items: [
-        { name: 'Add liquidity', to: '/add-liquidity' },
-        { name: 'Add liquidity (deposit one token)', to: '/add-liquidity-2' },
-        { name: 'Remove liquidity', to: '/remove-liquidity' }
+        { name: 'Add liquidity', to: 'mint1' },
+        { name: 'Add liquidity (deposit one token)', to: 'mint2' },
+        { name: 'Remove liquidity', to: 'burn' },
+        { name: 'Pools', to: 'pools' }
       ]
     };
   },

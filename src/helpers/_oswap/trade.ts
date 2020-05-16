@@ -1,8 +1,9 @@
 import Route from './route';
-import Pair from './pair';
+import Pool from './pool';
+import Factory from './factory';
 
 export default class Trade {
-  public factory: any;
+  public factory: Factory;
   public inputAsset: string;
   public outputAsset: string;
   public routes?: [] = [];
@@ -45,20 +46,27 @@ export default class Trade {
     this.routes.forEach((route, i) => {
       // @ts-ignore
       const inputAmount = route.getAmountSold(outputAmount, this.outputAsset);
-      if (!minAmount || inputAmount < minAmount) minAmount = inputAmount;
+      if (!minAmount || (inputAmount < minAmount && inputAmount > 0)) minAmount = inputAmount;
     });
     return minAmount;
   }
 
   async init() {
-    const directPair = this.factory.allPairs[`${this.inputAsset}_${this.outputAsset}`];
+    let directPools = this.factory.getPoolsByPair(this.inputAsset, this.outputAsset);
     // @ts-ignore
-    if (directPair) this.routes.push(this.toRoute([directPair]));
+    directPools.forEach(directPool => this.routes.push(this.toRoute([directPool])));
     if (this.inputAsset !== 'base' && this.outputAsset !== 'base') {
-      const swap0 = this.factory.allPairs[`${this.inputAsset}_base`];
-      const swap1 = this.factory.allPairs[`base_${this.outputAsset}`];
+      const swap0Pools = this.factory.getPoolsByPair(this.inputAsset, 'base');
+      const swap1Pools = this.factory.getPoolsByPair('base', this.outputAsset);
       // @ts-ignore
-      if (swap0 && swap1) this.routes.push(this.toRoute([swap0, swap1]));
+      if (swap0Pools && swap1Pools) {
+        swap0Pools.forEach(pool0 => {
+          swap1Pools.forEach(pool1 => {
+            // @ts-ignore
+            this.routes.push(this.toRoute([pool0, pool1]));
+          });
+        });
+      }
     }
     // @ts-ignore
     const promises = this.routes.map(route => route.init());
@@ -66,10 +74,11 @@ export default class Trade {
   }
 
   toRoute(addresses): Route {
-    const pairs = addresses.map(address => {
-      const assets = this.factory.getPair[address].split('_');
-      return new Pair(address, assets);
+    const pools = addresses.map(address => {
+      const pool = this.factory.pools[address];
+      // @ts-ignore
+      return new Pool(address, [pool.asset0, pool.asset1]);
     });
-    return new Route(pairs);
+    return new Route(pools);
   }
 }

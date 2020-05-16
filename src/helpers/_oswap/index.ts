@@ -29,16 +29,18 @@ export function toString(amount: number, decimals: number = 0) {
   return isNaN(str) || str < 0 ? '' : str;
 }
 
-export function getAmountBought(inputAmount, inputReserve, outputReserve) {
-  const numerator = inputAmount * outputReserve * 997;
-  const denominator = inputReserve * 1000 + inputAmount * 997;
-  return numerator / denominator;
+export function getAmountBought(inputAmount, inputReserve, outputReserve, swapFee) {
+  const swapNoFee = 1e11 - swapFee;
+  const numerator = inputAmount * outputReserve * swapNoFee;
+  const denominator = inputReserve * 1e11 + inputAmount * swapNoFee;
+  return Math.floor(numerator / denominator);
 }
 
-export function getAmountSold(outputAmount, outputReserve, inputReserve) {
-  const numerator = outputAmount * inputReserve * 1000;
-  const denominator = (outputReserve - outputAmount) * 997;
-  return numerator / denominator;
+export function getAmountSold(outputAmount, outputReserve, inputReserve, swapFee) {
+  const swapNoFee = 1e11 - swapFee;
+  const numerator = outputAmount * inputReserve * 1e11;
+  const denominator = (outputReserve - outputAmount) * swapNoFee;
+  return Math.ceil(numerator / denominator);
 }
 
 export async function getInfo(address) {
@@ -79,7 +81,8 @@ export function numberFromSeed(seed) {
   return nominator.div(denominator);
 }
 
-export function generateCreateUri(assetA, assetB) {
+export function generateCreateUri(assets, swapFee) {
+  const [assetA, assetB] = assets;
   const order = numberFromSeed(assetA) > numberFromSeed(assetB);
   const asset0 = order ? assetA : assetB;
   const asset1 = order ? assetB : assetA;
@@ -87,11 +90,11 @@ export function generateCreateUri(assetA, assetB) {
     'autonomous agent',
     {
       base_aa: BASE_ADDRESS,
-      params: { factory: FACTORY_ADDRESS, asset0, asset1 }
+      params: { factory: FACTORY_ADDRESS, asset0, asset1, swap_fee: swapFee }
     }
   ];
   const address = utils.getChash160(definition);
-  const data = { create: '1', address, asset0, asset1 };
+  const data = { create: '1', address, asset0, asset1, swap_fee: swapFee };
   return generateUri(FACTORY_ADDRESS, data);
 }
 

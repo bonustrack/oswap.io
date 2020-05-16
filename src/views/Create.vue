@@ -2,9 +2,8 @@
   <form @submit.prevent="handleSubmit">
     <div class="container-sm px-3">
       <Box>
-        <label for="assetA" class="d-block">Asset a unit</label>
+        <label for="assetA" class="d-block">Asset A unit</label>
         <input
-          readonly
           id="assetA"
           class="form-control input-amount border-0 p-0"
           autocomplete="off"
@@ -19,7 +18,7 @@
         </div>
       </Box>
       <Box>
-        <label for="assetB" class="d-block">Asset b unit</label>
+        <label for="assetB" class="d-block">Asset B unit</label>
         <input
           id="assetB"
           class="form-control input-amount border-0 p-0"
@@ -34,9 +33,23 @@
           <p v-text="decimalsB" class="text-white" />
         </div>
       </Box>
+      <Box>
+        <label for="swapFee" class="d-block">Swap fee (%)</label>
+        <input
+          id="swapFee"
+          class="form-control input-amount border-0 p-0"
+          autocomplete="off"
+          placeholder="0.000000000"
+          v-model="swapFee"
+          type="number"
+          step="0.000000001"
+          min="0.0001"
+          max="10"
+        />
+      </Box>
       <div class="text-center mb-4">
         <button class="btn-submit px-6 rounded-2 mb-3" type="submit" :disabled="!assetA || !assetB">
-          Create pair
+          Create a pool
         </button>
       </div>
     </div>
@@ -52,6 +65,7 @@ export default {
     return {
       assetA: 'base',
       assetB: '',
+      swapFee: '1',
       symbolA: false,
       symbolB: false,
       decimalsA: 0,
@@ -89,7 +103,8 @@ export default {
   },
   methods: {
     handleSubmit() {
-      location.href = generateCreateUri(this.assetA, this.assetB);
+      const swapFee = parseFloat(this.swapFee) * 1e9;
+      location.href = generateCreateUri([this.assetA, this.assetB], swapFee);
     }
   }
 };

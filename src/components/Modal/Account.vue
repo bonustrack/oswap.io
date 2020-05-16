@@ -12,7 +12,7 @@
           <Icon name="external-link" class="ml-1" size="18" />
         </a>
       </p>
-      <a @click="logout" class="btn-mktg btn-outline-mktg">Log out</a>
+      <a @click="logout" class="btn-outline">Log out</a>
     </div>
   </Modal>
 </template>

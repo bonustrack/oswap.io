@@ -11,7 +11,7 @@
           <InputAmount id="inputAmount" v-model="inputAmount" />
         </div>
         <div class="text-right mt-4 ml-4">
-          <ButtonSelectPair v-model="pair" />
+          <ButtonSelectPool v-model="pool" />
         </div>
       </Box>
       <Box>
@@ -29,7 +29,7 @@
         <button
           class="btn-submit px-6 rounded-2 mb-3"
           type="submit"
-          :disabled="!pair || !inputAmount"
+          :disabled="!pool || !inputAmount"
         >
           Remove liquidity
         </button>
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       inputAmount: 0,
-      pair: null,
+      pool: null,
       asset: null,
       supply: 0,
       asset0: null,
@@ -56,11 +56,10 @@ export default {
     };
   },
   watch: {
-    async pair(value, oldValue) {
+    async pool(value, oldValue) {
       if (value && value !== oldValue) {
         this.reset();
-        const address = this.$store.state.settings.allPairs[value];
-        const info = await getInfo(address);
+        const info = await getInfo(value);
         this.asset = info.asset;
         this.supply = info.supply;
         this.asset0 = info.asset0;
@@ -73,7 +72,7 @@ export default {
   computed: {
     outputAmounts() {
       if (
-        !this.pair ||
+        !this.pool ||
         !this.inputAmount ||
         isNaN(this.inputAmount) ||
         !this.reserve0 ||
@@ -84,8 +83,10 @@ export default {
       const asset0Str = assets[this.asset0].symbol || shorten(this.asset0);
       const asset1Str = assets[this.asset1].symbol || shorten(this.asset1);
       const investorShare = this.inputAmount / parseInt(this.supply);
-      const minted0 = toString(investorShare * this.reserve0, assets[this.asset0].decimals);
-      const minted1 = toString(investorShare * this.reserve1, assets[this.asset1].decimals);
+      const amount0 = Math.floor(investorShare * this.reserve0);
+      const minted0 = toString(amount0, assets[this.asset0].decimals);
+      const amount1 = Math.floor(investorShare * this.reserve1);
+      const minted1 = toString(amount1, assets[this.asset1].decimals);
       return `${minted0} ${asset0Str} + ${minted1} ${asset1Str}`;
     }
   },
@@ -102,8 +103,7 @@ export default {
       this.reserve1 = 0;
     },
     handleSubmit() {
-      const address = this.$store.state.settings.allPairs[this.pair];
-      location.href = generateUri(address, {}, this.inputAmount, this.asset);
+      location.href = generateUri(this.pool, {}, this.inputAmount, this.asset);
     }
   }
 };

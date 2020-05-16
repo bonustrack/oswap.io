@@ -26,8 +26,8 @@
           :value="getBalance(balances, i)"
         />
       </a>
-      <router-link to="/create-pair" class="d-block py-2 px-4 text-white">
-        Create pair
+      <router-link :to="{ name: 'create' }" class="d-block py-2 px-4 text-white">
+        Create a pool
       </router-link>
     </div>
   </Modal>

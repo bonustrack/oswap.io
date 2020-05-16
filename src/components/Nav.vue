@@ -8,18 +8,18 @@
     </div>
     <div class="position-relative">
       <span v-if="invite" class="position-absolute right-0 top-0 mx-3 my-4">
-        <a v-if="!address" :href="`${invite}#login`" class="btn-mktg btn-outline-mktg">Log in</a>
-        <a @click="modalAccountOpen = true" class="btn-mktg btn-outline-mktg" v-else>
+        <a v-if="!address" :href="`${invite}#login`" class="btn-outline">Log in</a>
+        <a @click="modalAccountOpen = true" class="btn-outline" v-else>
           {{ address | shorten }} <Avatar :address="address" size="18" class="ml-2" />
         </a>
         <a
-          class="btn-mktg btn-outline-mktg ml-2"
+          class="btn-outline ml-2"
           @click="modalSelectUnitOpen = true"
           v-text="unit.short || unit.symbol"
         />
       </span>
       <span class="position-fixed right-0 bottom-0 mx-3 my-4">
-        <a class="btn-mktg btn-outline-mktg ml-2" @click="modalAboutOpen = true" v-text="'?'" />
+        <a class="btn-outline ml-2" @click="modalAboutOpen = true" v-text="'?'" />
       </span>
       <h1 class="pt-4">
         <router-link to="/" class="text-white" style="font-size: 64px;">
@@ -29,8 +29,8 @@
       <div class="container-sm px-3">
         <div id="nav" class="clearfix bg-gray-9 d-flex rounded-2">
           <router-link to="/" class="d-block col-4 rounded-2">Swap</router-link>
-          <router-link to="/send" class="d-block col-4 rounded-2">Send</router-link>
-          <router-link to="/add-liquidity" class="d-block col-4 rounded-2">Pool</router-link>
+          <router-link :to="{ name: 'send' }" class="d-block col-4 rounded-2">Send</router-link>
+          <router-link :to="{ name: 'mint1' }" class="d-block col-4 rounded-2">Pool</router-link>
         </div>
       </div>
       <ModalAccount :open="modalAccountOpen" @close="modalAccountOpen = false" />

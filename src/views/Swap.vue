@@ -67,6 +67,7 @@
 
 <script>
 import Trade from '@/helpers/_oswap/trade';
+import Factory from '@/helpers/_oswap/factory';
 import { generateUri, toString } from '@/helpers/_oswap';
 
 export default {
@@ -124,22 +125,27 @@ export default {
       await this.init();
     },
     async init() {
-      this.trade = new Trade(this.$store.state.settings, this.inputAsset, this.outputAsset);
+      if (!this.inputAsset || !this.outputAsset) return;
+      const settings = this.$store.state.settings;
+      const factory = new Factory(settings.pools, settings.pairs);
+      this.trade = new Trade(factory, this.inputAsset, this.outputAsset);
       await this.trade.init();
     },
     handleSubmit() {
       const data = {};
       const route = this.trade.getRoute(this.inputAmount);
-      const address = route.pairs[0].address;
+      const address = route.pools[0].address;
       if (this.to && this.$route.name === 'send') data.to = this.to;
-      if (route.pairs[1]) data.to_aa = route.pairs[1].address;
+      if (route.pools[1]) data.to_aa = route.pools[1].address;
       location.href = generateUri(address, data, this.inputAmount, this.inputAsset);
     },
     updateOutputAmount() {
+      if (!this.inputAsset || !this.outputAsset) return;
       if (this.inputAmount) this.outputAmount = this.trade.getAmountBought(this.inputAmount) || '';
       this.updateRate();
     },
     updateInputAmount() {
+      if (!this.inputAsset || !this.outputAsset) return;
       if (this.outputAmount) this.inputAmount = this.trade.getAmountSold(this.outputAmount) || '';
       this.updateRate();
     }

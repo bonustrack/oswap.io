@@ -9,7 +9,7 @@
         :key="i"
       >
         {{ unit.symbol }}
-        <span class="float-right" v-if="exchangeRates">
+        <span class="float-right text-gray" v-if="exchangeRates">
           1 {{ unit.symbol }} ≈ ${{ getRate(unit.decimals).toFixed(4) }}
         </span>
       </a>

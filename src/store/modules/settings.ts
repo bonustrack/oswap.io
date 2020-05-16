@@ -8,12 +8,12 @@ import units from '@/helpers/units.json';
 const state = {
   isLoading: false,
   assets: {},
-  allPairs: {},
-  getPair: {},
-  getAsset: {},
   assetToSymbol: {},
   decimals: {},
-  exchangeRates: {}
+  exchangeRates: {},
+  pools: {},
+  pairs: {},
+  count: 0
 };
 
 client.subscribe(result => {
@@ -32,23 +32,22 @@ const mutations = {
     const assets = { base: lSUnit ? JSON.parse(lSUnit) : units[0] };
     Vue.set(_state, 'assetToSymbol', registry.a2s);
     const decimals = {};
-    Object.entries(registry.current).forEach(current => {
+    Object.entries(registry.current).forEach((current: any) => {
       const asset = current[0].replace('desc_', '');
-      // @ts-ignore
       decimals[asset] = parseInt(registry.decimals[current[1]]) || 0;
     });
     Vue.set(_state, 'decimals', decimals);
-    if (factory.all_pairs) {
-      Vue.set(_state, 'allPairs', factory.all_pairs);
-      Vue.set(_state, 'getPair', factory.get_pair);
-      Vue.set(_state, 'getAsset', factory.get_asset);
-      Object.entries(factory.get_pair).forEach(pair => {
-        // @ts-ignore
-        pair[1].split('_').forEach(asset => {
-          // @ts-ignore
-          if (asset !== 'base' && factory.get_asset && factory.get_asset[pair[0]])
-            assets[asset] = { symbol: registry.a2s[asset], decimals: decimals[asset] || 0 };
-        });
+    if (factory.pools) {
+      Vue.set(_state, 'pools', factory.pools);
+      Vue.set(_state, 'pairs', factory.pairs);
+      Vue.set(_state, 'count', factory.count);
+      Object.entries(factory.pools).forEach((pool: any) => {
+        if (pool[1].asset) {
+          [pool[1].asset0, pool[1].asset1].forEach(asset => {
+            if (asset !== 'base')
+              assets[asset] = { symbol: registry.a2s[asset], decimals: decimals[asset] || 0 };
+          });
+        }
       });
     }
     Vue.set(_state, 'assets', assets);
