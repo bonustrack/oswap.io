@@ -4,6 +4,6 @@
   "homepage_url": "https://oswap.io",
   "source_url": "https://github.com/bonustrack/oswap",
   "field_descriptions": {
-    "create": "Create pair"
+    "create": "Create a pool"
   }
 }
