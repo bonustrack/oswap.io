@@ -1,19 +1,24 @@
 {
 	doc_url: 'https://testnet.oswap.io/factory.json',
 	init: `{
-		$base = 'AV6IIJ567NKMJGHIBGKEYTQLBW4ATUUT';
+		$base = '5DNICJLNOBPANH536Y7YVBN5ZDBLQ4LE';
 		$address = trigger.data.address;
 		$asset0 = trigger.data.asset0;
 		$asset1 = trigger.data.asset1;
+		$swapFee = trigger.data.swap_fee;
+		$swapFeeMin = 1e5;
+		$swapFeeMax = 1e10;
 	}`,
 	messages: {
 		cases: [
 			{ // create
-				if: `{trigger.data.create AND $asset0 AND $asset1 AND trigger.output[[asset=base]] == 1e4}`,
+				if: `{trigger.data.create AND $asset0 AND $asset1 AND $swapFee AND trigger.output[[asset=base]] == 1e4}`,
 				init: `{
+					if (!is_integer($swapFee) OR $swapFee > $swapFeeMax OR $swapFee < $swapFeeMin)
+						bounce('swap fee must between ' || $swapFeeMin || ' and ' || $swapFeeMax);
 					if ($asset0 == $asset1) bounce('identical asset');
 					if (number_from_seed($asset1) >= number_from_seed($asset0)) bounce('wrong asset order');
-					if (var['all_pairs.' || $asset0 || '_' || $asset1]) bounce('pair exists');
+					if (var['all_pools.' || $asset0 || '_' || $asset1]) bounce('pool exists');
 					if (
 						!asset[$asset0].exists
 						OR asset[$asset0].is_private
@@ -37,7 +42,8 @@
 									params: {
 										factory: `{this_address}`,
 										asset0: `{$asset0}`,
-										asset1: `{$asset1}`
+										asset1: `{$asset1}`,
+										swap_fee: `{$swapFee}`
 									}
 								}
 							]
@@ -61,22 +67,25 @@
 						state: `{
 							if ($address != unit[response_unit].messages[[.app='definition']].payload.address)
 								bounce('wrong address');
-							var['all_pairs.' || $asset0 || '_' || $asset1] = $address;
-							var['all_pairs.' || $asset1 || '_' || $asset0] = $address;
-							var['get_pair.' || $address] = $asset0 || '_' || $asset1;
-							var['pair_count'] += 1;
+							$i = var['pairs.' || $asset0 || '_' || $asset1 || '.i'] OTHERWISE 0;
+							var['pairs.' || $asset0 || '_' || $asset1 || '.pools[' || $i || ']'] = $address;
+							var['pairs.' || $asset0 || '_' || $asset1 || '.i'] += 1;
+							var['pools.' || $address || '.asset0'] = $asset0;
+							var['pools.' || $address || '.asset1'] = $asset1;
+							var['pools.' || $address || '.swap_fee'] = $swapFee;
+							var['count'] += 1;
 							response['type'] = 'create';
 						}`
 					}
 				]
 			},
 			{ // finalize
-				if: `{trigger.data.finalize AND var['get_pair.' || trigger.address]}`,
+				if: `{trigger.data.finalize AND var['pools.' || trigger.address || '.asset0']}`,
 				messages: [
 					{
 						app: 'state',
 						state: `{
-							var['get_asset.' || trigger.address] = trigger.unit;
+							var['pools.' || trigger.address || '.asset'] = trigger.unit;
 							response['type'] = 'finalize';
 						}`
 					}
