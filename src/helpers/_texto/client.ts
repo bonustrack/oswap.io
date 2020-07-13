@@ -2,6 +2,7 @@ import { Client as KbyteClient } from 'kbyte';
 import { publicKeyCreate } from 'secp256k1';
 import { getDeviceMessageHashToSign, getDeviceAddress } from '@obyte/ocore/object_hash';
 import { fromWif, decryptPackage, createObjDeviceKey, createEncryptedPackage, sign } from './utils';
+import mainConfig from '../config';
 
 export default class Client {
   public address: string;
@@ -16,7 +17,7 @@ export default class Client {
   private objMyPermDeviceKey: any;
 
   constructor(config) {
-    this.address = config.address ? config.address : 'wss://obyte.org/bb-test';
+    this.address = config.address ? config.address : `wss://${mainConfig.node}`;
     this.client = config.client ? config.client : new KbyteClient(this.address);
     this.config = config;
     const { testnet, wif, tempPrivKey, prevTempPrivKey, name } = config;

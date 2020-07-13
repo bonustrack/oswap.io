@@ -100,7 +100,7 @@ export function generateCreateUri(assets, swapFee) {
 }
 
 export function generateUri(address, data, amount = 1e4, asset?) {
-  let uri = `obyte-tn:${address}`;
+  let uri = `${config.uri}:${address}`;
   const json = JSON.stringify(data);
   const b64 = encodeURIComponent(Buffer.from(json).toString('base64'));
   uri += `?base64data=${b64}`;
