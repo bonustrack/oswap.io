@@ -9,7 +9,7 @@
         <label :for="i" class="d-block" v-text="item.name" />
         <a
           :id="i"
-          :href="`https://testnetexplorer.obyte.org/#${item.address}`"
+          :href="_explorerLink(item.address)"
           target="_blank"
           class="d-block py-2 text-white"
         >

@@ -9,7 +9,7 @@ export default {
   props: ['value', 'asset'],
   computed: {
     str() {
-      const asset = this.$store.state.settings.assets[this.asset];
+      const asset = this.settings.assets[this.asset];
       const decimals = asset ? asset.decimals : 0;
       return toString(this.value, decimals);
     }

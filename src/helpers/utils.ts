@@ -1,3 +1,4 @@
+import config from '@/helpers/config';
 import pkg from '@/../package.json';
 
 export const LOCALSTORAGE_KEY = pkg.name;
@@ -16,4 +17,8 @@ export function b64UriEnc(str) {
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=/g, '');
+}
+
+export function explorerLink(str) {
+  return `https://${config.testnet ? 'testnet' : ''}explorer.obyte.org/#${str}`;
 }

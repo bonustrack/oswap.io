@@ -23,7 +23,7 @@ export default {
   async created() {
     const pools = [];
     const promises = [];
-    Object.entries(this.$store.state.settings.pools).forEach(([address, pool]) => {
+    Object.entries(this.settings.pools).forEach(([address, pool]) => {
       const p = new Pool(address, [pool.asset0, pool.asset1]);
       promises.push(p.init());
       pools.push(p);

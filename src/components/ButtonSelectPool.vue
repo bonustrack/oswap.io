@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     ticker() {
-      const pool = this.$store.state.settings.pools[this.input];
+      const pool = this.settings.pools[this.input];
       return `${pool.asset0}_${pool.asset1}`;
     }
   },

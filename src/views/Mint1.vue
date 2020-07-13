@@ -91,7 +91,7 @@ export default {
       this.amount1 = (this.amount0 / k).toFixed();
     },
     handleSubmit() {
-      const assets = this.$store.state.settings.assets;
+      const assets = this.settings.assets;
       const address = this.pool.address;
       const payments = [
         { address, amount: parseInt(this.amount0), asset: this.pool.asset0 },
@@ -108,7 +108,7 @@ export default {
       texto.on('pairing', msg => {
         if (msg.body.pairing_secret === requestId) msg.reply(message);
       });
-      location.href = `${this.$store.state.auth.invite}#${requestId}`;
+      location.href = `${this.auth.invite}#${requestId}`;
     }
   }
 };

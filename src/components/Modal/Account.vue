@@ -3,11 +3,7 @@
     <div class="modal-body flex-auto my-5 px-4">
       <h2 class="mb-3">Account</h2>
       <p>
-        <a
-          :href="`https://testnetexplorer.obyte.org/#${address}`"
-          target="_blank"
-          class="d-block py-2 text-white"
-        >
+        <a :href="_explorerLink(address)" target="_blank" class="d-block py-2 text-white">
           <Avatar :address="address" size="18" class="mr-1" /> {{ address }}
           <Icon name="external-link" class="ml-1" size="18" />
         </a>
@@ -22,7 +18,7 @@ export default {
   props: ['open'],
   computed: {
     address() {
-      return this.$store.state.auth.address;
+      return this.auth.address;
     }
   },
   methods: {

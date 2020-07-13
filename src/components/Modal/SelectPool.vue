@@ -50,8 +50,8 @@ export default {
   computed: {
     pools() {
       const pools = {};
-      const assets = this.$store.state.settings.assets;
-      Object.entries(this.$store.state.settings.pools).forEach(pool => {
+      const assets = this.settings.assets;
+      Object.entries(this.settings.pools).forEach(pool => {
         let str = `${assets[pool[1].asset0].symbol}-${assets[pool[1].asset1].symbol}`;
         str += `${pool[1].asset0}-${pool[1].asset1}`;
         if (pool[1].asset && str.toLowerCase().includes(this.query.toLowerCase())) {
@@ -63,7 +63,7 @@ export default {
       return pools;
     },
     balances() {
-      return this.$store.state.auth.balances;
+      return this.auth.balances;
     }
   },
   methods: {

@@ -6,6 +6,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
+import mixins from '@/mixins';
 import { shorten } from '@/helpers/utils';
 import messages from '@/helpers/messages.json';
 import numberFormats from '@/helpers/number.json';
@@ -15,7 +16,7 @@ Vue.use(VueUi);
 Vue.use(VueI18n);
 const i18n = new VueI18n({ locale: 'en', messages, numberFormats });
 
-const requireComponent = require.context('./components', true, /[\w-]+\.vue$/);
+const requireComponent = require.context('@/components', true, /[\w-]+\.vue$/);
 requireComponent.keys().forEach(fileName => {
   const componentConfig = requireComponent(fileName);
   const componentName = upperFirst(camelCase(fileName.replace(/^\.\//, '').replace(/\.\w+$/, '')));
@@ -24,6 +25,7 @@ requireComponent.keys().forEach(fileName => {
 
 Vue.filter('blockie', value => makeBlockie(value));
 Vue.filter('shorten', value => shorten(value));
+Vue.mixin(mixins);
 
 Vue.config.productionTip = false;
 

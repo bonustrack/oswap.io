@@ -1,5 +1,5 @@
 {
-  doc_url: 'https://testnet.oswap.io/pool.json',
+  doc_url: 'https://oswap.io/pool.json',
   init: '{
     $bounceFees = 1e4;
     $minLiquidity = 1e3;

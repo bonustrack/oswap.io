@@ -102,7 +102,7 @@ export default {
         this.rate = 0;
         return;
       }
-      const { assets } = this.$store.state.settings;
+      const { assets } = this.settings;
       const inputAmount = toString(this.inputAmount, assets[this.inputAsset].decimals);
       const outputAmount = toString(this.outputAmount, assets[this.outputAsset].decimals);
       const rate = parseFloat((inputAmount / outputAmount).toFixed(6));
@@ -126,7 +126,7 @@ export default {
     },
     async init() {
       if (!this.inputAsset || !this.outputAsset) return;
-      const settings = this.$store.state.settings;
+      const settings = this.settings;
       const factory = new Factory(settings.pools, settings.pairs);
       this.trade = new Trade(factory, this.inputAsset, this.outputAsset);
       await this.trade.init();

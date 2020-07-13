@@ -46,7 +46,7 @@ export default {
   computed: {
     assets() {
       const assets = {};
-      Object.entries(this.$store.state.settings.assets).forEach(asset => {
+      Object.entries(this.settings.assets).forEach(asset => {
         const str = `${asset[1].symbol}-${asset[0]}`;
         if (
           str.toLowerCase().includes(this.query.toLowerCase()) &&
@@ -58,7 +58,7 @@ export default {
       return assets;
     },
     balances() {
-      return this.$store.state.auth.balances;
+      return this.auth.balances;
     }
   },
   methods: {

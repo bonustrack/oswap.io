@@ -70,9 +70,9 @@ export default {
       symbolB: false,
       decimalsA: 0,
       decimalsB: 0,
-      assets: this.$store.state.settings.assets,
-      assetToSymbol: this.$store.state.settings.assetToSymbol,
-      decimals: this.$store.state.settings.decimals
+      assets: this.settings.assets,
+      assetToSymbol: this.settings.assetToSymbol,
+      decimals: this.settings.decimals
     };
   },
   watch: {
