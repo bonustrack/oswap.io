@@ -69,10 +69,7 @@ export default {
       symbolA: false,
       symbolB: false,
       decimalsA: 0,
-      decimalsB: 0,
-      assets: this.settings.assets,
-      assetToSymbol: this.settings.assetToSymbol,
-      decimals: this.settings.decimals
+      decimalsB: 0
     };
   },
   watch: {
@@ -95,6 +92,14 @@ export default {
           this.decimalsB = this.decimals[value] || 0;
         }
       }
+    }
+  },
+  computed: {
+    assetToSymbol() {
+      return this.settings.assetToSymbol;
+    },
+    decimals() {
+      return this.settings.decimals;
     }
   },
   created() {

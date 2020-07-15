@@ -23,10 +23,16 @@ import { b64UriDec } from '@/helpers/utils';
 export default {
   data() {
     return {
-      id: b64UriDec(this.$route.params.id),
-      symbol: this.settings.assetToSymbol[b64UriDec(this.$route.params.id)],
-      decimals: this.settings.decimals[b64UriDec(this.$route.params.id)] || 0
+      id: b64UriDec(this.$route.params.id)
     };
+  },
+  computed: {
+    symbol() {
+      return this.settings.assetToSymbol[b64UriDec(this.$route.params.id)];
+    },
+    decimals() {
+      return this.settings.decimals[b64UriDec(this.$route.params.id)] || 0;
+    }
   }
 };
 </script>
