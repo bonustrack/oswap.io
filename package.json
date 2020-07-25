@@ -8,7 +8,8 @@
     "lint": "vue-cli-service lint",
     "express": "vue-cli-service express:watch",
     "express:run": "vue-cli-service express:run",
-    "start": "vue-cli-service express:run"
+    "start": "vue-cli-service express:run",
+    "deploy": "ipfs-deploy dist -p pinata -d cloudflare"
   },
   "dependencies": {
     "@obyte/ocore": "^0.2.93",
