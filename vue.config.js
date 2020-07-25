@@ -1,5 +1,5 @@
 module.exports = {
-  // publicPath: '././',
+  publicPath: process.env.DEPLOY ? '././' : '/',
   lintOnSave: false,
   pluginOptions: {
     express: {
