@@ -20,7 +20,7 @@ export default {
   watch: {
     async id(value, oldValue) {
       if (value !== oldValue) {
-        const { asset0, asset1 } = this.$store.state.settings.pools[value];
+        const { asset0, asset1 } = this.settings.pools[value];
         const pool = new Pool(value, [asset0, asset1]);
         await pool.init();
         this.pool = pool;

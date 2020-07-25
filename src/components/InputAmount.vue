@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     decimals() {
-      const asset = this.$store.state.settings.assets[this.asset];
+      const asset = this.settings.assets[this.asset];
       return asset ? asset.decimals : 0;
     },
     placeholder() {

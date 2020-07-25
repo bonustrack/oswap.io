@@ -3,12 +3,13 @@ import { utils } from 'obyte';
 import store from '@/store';
 import texto from '@/helpers/texto';
 import client from '@/helpers/client';
+import config from '@/helpers/config';
 import { LOCALSTORAGE_KEY } from '@/helpers/utils';
 
 texto.on('ready', () => {
   const devicePubKey = texto.devicePubKey;
   console.log(`Logged in as ${devicePubKey}!`);
-  store.commit('invite', `obyte-tn:${devicePubKey}@obyte.org/bb-test`);
+  store.commit('invite', `${config.uri}:${devicePubKey}@${config.node}`);
 });
 
 texto.on('pairing', msg => {

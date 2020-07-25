@@ -3,10 +3,11 @@ import { createHash } from 'crypto';
 import Decimal from 'decimal.js';
 import { utils } from 'obyte';
 import client from '@/helpers/client';
+import config from '@/helpers/config';
 
-export const FACTORY_ADDRESS = process.env.VUE_APP_FACTORY_ADDRESS || '';
-export const BASE_ADDRESS = process.env.VUE_APP_BASE_ADDRESS || '';
-export const TOKEN_REGISTRY_ADDRESS = process.env.VUE_APP_TOKEN_REGISTRY_ADDRESS || '';
+export const FACTORY_ADDRESS = config.factoryAddress;
+export const BASE_ADDRESS = config.baseAddress;
+export const TOKEN_REGISTRY_ADDRESS = config.tokenRegistryAddress;
 
 Decimal.set({
   precision: 15,
@@ -99,7 +100,7 @@ export function generateCreateUri(assets, swapFee) {
 }
 
 export function generateUri(address, data, amount = 1e4, asset?) {
-  let uri = `obyte-tn:${address}`;
+  let uri = `${config.uri}:${address}`;
   const json = JSON.stringify(data);
   const b64 = encodeURIComponent(Buffer.from(json).toString('base64'));
   uri += `?base64data=${b64}`;

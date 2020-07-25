@@ -79,7 +79,7 @@ export default {
         !this.reserve1
       )
         return '';
-      const { assets } = this.$store.state.settings;
+      const { assets } = this.settings;
       const asset0Str = assets[this.asset0].symbol || shorten(this.asset0);
       const asset1Str = assets[this.asset1].symbol || shorten(this.asset1);
       const investorShare = this.inputAmount / parseInt(this.supply);

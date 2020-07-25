@@ -12,7 +12,7 @@
 export default {
   computed: {
     isLoading() {
-      return this.$store.state.settings.isLoading;
+      return this.settings.isLoading;
     }
   },
   created() {

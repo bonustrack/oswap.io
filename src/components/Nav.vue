@@ -54,13 +54,13 @@ export default {
   },
   computed: {
     address() {
-      return this.$store.state.auth.address;
+      return this.auth.address;
     },
     invite() {
-      return this.$store.state.auth.invite;
+      return this.auth.invite;
     },
     unit() {
-      return this.$store.state.settings.assets.base;
+      return this.settings.assets.base;
     }
   },
   methods: {

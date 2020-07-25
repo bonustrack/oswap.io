@@ -24,9 +24,13 @@ export default {
   props: ['open'],
   data() {
     return {
-      units,
-      exchangeRates: this.$store.state.settings.exchangeRates
+      units
     };
+  },
+  computed: {
+    exchangeRates() {
+      return this.settings.exchangeRates;
+    }
   },
   methods: {
     select(unit) {

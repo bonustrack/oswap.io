@@ -1,0 +1,20 @@
+{
+  "testnet": {
+    "network": "testnet",
+    "testnet": true,
+    "uri": "obyte-tn",
+    "node": "obyte.org/bb-test",
+    "factoryAddress": "PFNAFDKV6HKKFIEB2R2ZE4IAPSDNNIGX",
+    "baseAddress": "5DNICJLNOBPANH536Y7YVBN5ZDBLQ4LE",
+    "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ"
+  },
+  "livenet": {
+    "network": "livenet",
+    "testnet": false,
+    "uri": "obyte",
+    "node": "obyte.org/bb",
+    "factoryAddress": "B22543LKSS35Z55ROU4GDN26RT6MDKWU",
+    "baseAddress": "GS23D3GQNNMNJ5TL4Z5PINZ5626WASMA",
+    "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ"
+  }
+}

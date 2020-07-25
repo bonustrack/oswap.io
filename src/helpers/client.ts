@@ -1,6 +1,7 @@
 import { Client } from 'kbyte';
+import config from '@/helpers/config';
 
-const address = 'wss://obyte.org/bb-test';
+const address = `wss://${config.node}`;
 let client;
 
 function connect() {

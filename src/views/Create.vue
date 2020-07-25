@@ -69,10 +69,7 @@ export default {
       symbolA: false,
       symbolB: false,
       decimalsA: 0,
-      decimalsB: 0,
-      assets: this.$store.state.settings.assets,
-      assetToSymbol: this.$store.state.settings.assetToSymbol,
-      decimals: this.$store.state.settings.decimals
+      decimalsB: 0
     };
   },
   watch: {
@@ -95,6 +92,14 @@ export default {
           this.decimalsB = this.decimals[value] || 0;
         }
       }
+    }
+  },
+  computed: {
+    assetToSymbol() {
+      return this.settings.assetToSymbol;
+    },
+    decimals() {
+      return this.settings.decimals;
     }
   },
   created() {

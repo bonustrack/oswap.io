@@ -12,7 +12,7 @@ export default {
   props: ['asset'],
   computed: {
     balance() {
-      const { balances } = this.$store.state.auth;
+      const { balances } = this.auth;
       return this.asset ? getBalance(balances, this.asset) : 0;
     }
   },

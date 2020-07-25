@@ -2,7 +2,7 @@
   <div class="container-sm px-3">
     <Box>
       <h1>
-        <a :href="`https://testnetexplorer.obyte.org/#${id}`" target="_blank">
+        <a :href="_explorerLink(id)" target="_blank">
           {{ id | shorten }}
           <Icon name="external-link" class="ml-1" size="18" />
         </a>
@@ -23,10 +23,16 @@ import { b64UriDec } from '@/helpers/utils';
 export default {
   data() {
     return {
-      id: b64UriDec(this.$route.params.id),
-      symbol: this.$store.state.settings.assetToSymbol[b64UriDec(this.$route.params.id)],
-      decimals: this.$store.state.settings.decimals[b64UriDec(this.$route.params.id)] || 0
+      id: b64UriDec(this.$route.params.id)
     };
+  },
+  computed: {
+    symbol() {
+      return this.settings.assetToSymbol[b64UriDec(this.$route.params.id)];
+    },
+    decimals() {
+      return this.settings.decimals[b64UriDec(this.$route.params.id)] || 0;
+    }
   }
 };
 </script>

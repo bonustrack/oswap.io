@@ -9,7 +9,7 @@ export default {
   props: ['asset'],
   computed: {
     ticker() {
-      const assets = this.$store.state.settings.assets;
+      const assets = this.settings.assets;
       let ticker = '';
       this.asset.split('_').forEach((asset, i) => {
         ticker += assets[asset].symbol || shorten(asset);
