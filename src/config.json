@@ -1,6 +1,7 @@
 {
   "testnet": {
     "network": "testnet",
+    "explorer": "https://testnetexplorer.obyte.org",
     "testnet": true,
     "uri": "obyte-tn",
     "node": "obyte.org/bb-test",
@@ -10,6 +11,7 @@
   },
   "livenet": {
     "network": "livenet",
+    "explorer": "https://explorer.obyte.org",
     "testnet": false,
     "uri": "obyte",
     "node": "obyte.org/bb",

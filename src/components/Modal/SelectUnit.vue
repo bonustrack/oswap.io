@@ -1,7 +1,7 @@
 <template>
   <Modal :open="open" @close="$emit('close')">
     <div class="modal-body flex-auto my-5">
-      <h2 class="mx-4 mb-3">Unit</h2>
+      <h2 class="mx-4 mb-3 text-white">Unit</h2>
       <a
         class="d-block py-2 mt-n1 px-4 text-white highlight"
         @click="select(unit)"

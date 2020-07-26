@@ -4,22 +4,25 @@
       <a @click="hideWarning">
         <Icon class="position-absolute right-0 top-0 p-3 m-1" name="close" size="18" />
       </a>
-      <div class="p-2">This project is in alpha. Use at your own risk.</div>
+      <div class="p-2">This project is in beta. Use at your own risk.</div>
     </div>
     <div class="position-relative">
+      <a
+        v-text="config.network"
+        @click="modalAboutOpen = true"
+        class="position-absolute left-0 top-0 mx-3 my-4 btn-outline"
+      />
       <span v-if="invite" class="position-absolute right-0 top-0 mx-3 my-4">
         <a v-if="!address" :href="`${invite}#login`" class="btn-outline">Log in</a>
         <a @click="modalAccountOpen = true" class="btn-outline" v-else>
-          {{ address | shorten }} <Avatar :address="address" size="18" class="ml-2" />
+          <span class="hide-sm hide-md mr-2">{{ address | shorten }}</span>
+          <Avatar :address="address" size="18" />
         </a>
         <a
           class="btn-outline ml-2"
           @click="modalSelectUnitOpen = true"
           v-text="unit.short || unit.symbol"
         />
-      </span>
-      <span class="position-fixed right-0 bottom-0 mx-3 my-4">
-        <a class="btn-outline ml-2" @click="modalAboutOpen = true" v-text="'?'" />
       </span>
       <h1 class="pt-4">
         <router-link to="/" class="text-white" style="font-size: 64px;">
@@ -42,6 +45,7 @@
 
 <script>
 import { LOCALSTORAGE_KEY } from '@/helpers/utils';
+import config from '@/helpers/config';
 
 export default {
   data() {
@@ -49,7 +53,8 @@ export default {
       modalSelectUnitOpen: false,
       modalAccountOpen: false,
       modalAboutOpen: false,
-      showWarning: !localStorage.getItem(`${LOCALSTORAGE_KEY}.warning`)
+      showWarning: !localStorage.getItem(`${LOCALSTORAGE_KEY}.warning`),
+      config
     };
   },
   computed: {
