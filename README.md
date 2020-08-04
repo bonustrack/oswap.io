@@ -1,4 +1,4 @@
-# Oswap
+# Oswap.io
 
 Obyte exchange protocol.
 
