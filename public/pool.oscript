@@ -86,7 +86,7 @@
 				}',
 				init: '{
 					if (
-						($both AND ($amount0NoFees * $amount1NoFees) < $minLiquidity)
+						($both AND ($amount0NoFees * $amount1NoFees) < $minLiquidity) 
 						OR (($asset0Only OR $asset1Only) AND ($amount0NoFees + $amount1NoFees) < $minLiquidity)
 					)
 						bounce('not enough liquidity, minimum is ' || $minLiquidity);
@@ -181,7 +181,7 @@
 					$numerator = ${'amount' || $in} * ${'reserve' || $out} * $swapNoFee;
 					$denominator = ${'reserve' || $in} * 1e11 + ${'amount' || $in} * $swapNoFee;
 					$amount = floor($numerator / $denominator);
-					if ($amount == 0 OR ($amountOutMin AND $amount < $amountOutMin))
+					if ($amount == 0 OR ($amountOutMin AND $amount < $amountOutMin)) 
 						bounce('insufficient output amount');
 					$address = $toAA ? $toAA : $to;
 				}',
