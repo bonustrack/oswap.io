@@ -59,7 +59,7 @@
   },
   "repository": "bonustrack/oswap.io",
   "author": "Bonustrack",
-  "license": "MIT",
+  "license": "WTFPL-2",
   "bugs": {
     "url": "https://github.com/bonustrack/oswap.io/issues"
   },
