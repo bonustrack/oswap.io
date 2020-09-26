@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     assetValue(value, assetId) {
-      const asset = assetId === 'base' ? { decimals: 9 } : this.settings.assets[assetId];
+      const asset = this.settings.assets[assetId];
       const decimals = asset ? asset.decimals : 0;
       return value / 10 ** decimals;
     }
