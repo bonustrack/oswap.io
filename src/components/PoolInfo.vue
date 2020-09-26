@@ -7,7 +7,7 @@
       <a :href="_explorerLink(pool.address)" target="_blank">
         <Amount :value="pool.reserve0" :asset="pool.asset0" /> <Ticker :asset="pool.asset0" /> +
         <Amount :value="pool.reserve1" :asset="pool.asset1" /> <Ticker :asset="pool.asset1" />
-        <span v-if="usdValue"> ≈ ${{ usdValue.toFixed(2) }}</span>
+        <span v-if="pool.hasLiquidity() && usdValue"> ≈ ${{ usdValue.toFixed(2) }}</span>
         <Icon name="external-link" class="ml-1" size="18" />
       </a>
     </div>
