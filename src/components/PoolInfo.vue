@@ -55,16 +55,22 @@ export default {
       return this.settings.exchangeRates;
     },
     usdValue() {
-      const assetId0 = this.pool.asset0 === 'base' ? 'GBYTE' : this.pool.asset0;
-      const assetId1 = this.pool.asset1 === 'base' ? 'GBYTE' : this.pool.asset1;
-      const assetValue0 = this.exchangeRates[`${assetId0}_USD`]
-        ? this.exchangeRates[`${assetId0}_USD`] *
-          this.assetValue(this.pool.reserve0, this.pool.asset0)
-        : 0;
-      const assetValue1 = this.exchangeRates[`${assetId1}_USD`]
-        ? this.exchangeRates[`${assetId1}_USD`] *
-          this.assetValue(this.pool.reserve1, this.pool.asset1)
-        : 0;
+      let assetValue0 = 0;
+      let assetValue1 = 0;
+      if (this.pool.base) {
+        assetValue0 = assetValue1 = (this.exchangeRates.GBYTE_USD / 1e9) * this.pool.base;
+      } else {
+        const assetId0 = this.pool.asset0 === 'base' ? 'GBYTE' : this.pool.asset0;
+        const assetId1 = this.pool.asset1 === 'base' ? 'GBYTE' : this.pool.asset1;
+        assetValue0 = this.exchangeRates[`${assetId0}_USD`]
+          ? this.exchangeRates[`${assetId0}_USD`] *
+            this.assetValue(this.pool.reserve0, this.pool.asset0)
+          : 0;
+        assetValue1 = this.exchangeRates[`${assetId1}_USD`]
+          ? this.exchangeRates[`${assetId1}_USD`] *
+            this.assetValue(this.pool.reserve1, this.pool.asset1)
+          : 0;
+      }
       return assetValue0 && assetValue1 ? assetValue0 + assetValue1 : 0;
     }
   }
