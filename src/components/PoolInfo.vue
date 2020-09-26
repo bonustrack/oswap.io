@@ -6,9 +6,8 @@
       <label class="d-block">Current pool size</label>
       <a :href="_explorerLink(pool.address)" target="_blank">
         <Amount :value="pool.reserve0" :asset="pool.asset0" /> <Ticker :asset="pool.asset0" /> +
-        <Amount :value="pool.reserve1" :asset="pool.asset1" /> <Ticker :asset="pool.asset1" /> ≈ ${{
-          usdValue.toFixed(2)
-        }}
+        <Amount :value="pool.reserve1" :asset="pool.asset1" /> <Ticker :asset="pool.asset1" />
+        <span v-if="usdValue"> ≈ ${{ usdValue.toFixed(2) }}</span>
         <Icon name="external-link" class="ml-1" size="18" />
       </a>
     </div>
@@ -44,13 +43,29 @@ export default {
       }
     }
   },
+  methods: {
+    assetValue(value, assetId) {
+      const asset = assetId === 'base' ? { decimals: 9 } : this.settings.assets[assetId];
+      const decimals = asset ? asset.decimals : 0;
+      return value / 10 ** decimals;
+    }
+  },
   computed: {
     exchangeRates() {
       return this.settings.exchangeRates;
     },
     usdValue() {
-      if (!this.pool.base) return 0;
-      return (this.exchangeRates.GBYTE_USD / 1e9) * this.pool.base * 2;
+      const assetId0 = this.pool.asset0 === 'base' ? 'GBYTE' : this.pool.asset0;
+      const assetId1 = this.pool.asset1 === 'base' ? 'GBYTE' : this.pool.asset1;
+      const assetValue0 = this.exchangeRates[`${assetId0}_USD`]
+        ? this.exchangeRates[`${assetId0}_USD`] *
+          this.assetValue(this.pool.reserve0, this.pool.asset0)
+        : 0;
+      const assetValue1 = this.exchangeRates[`${assetId1}_USD`]
+        ? this.exchangeRates[`${assetId1}_USD`] *
+          this.assetValue(this.pool.reserve1, this.pool.asset1)
+        : 0;
+      return assetValue0 && assetValue1 ? assetValue0 + assetValue1 : 0;
     }
   }
 };
