@@ -2,7 +2,7 @@
   <form @submit.prevent="handleSubmit">
     <div class="container-sm px-3">
       <PoolNav :default="1" />
-      <BoxSelectPool v-model="pool" />
+      <BoxSelectPool :address="address" v-model="pool" />
       <Box v-if="pool.asset0 && pool.reserve0 && pool.reserve1" class="d-flex">
         <div class="flex-auto">
           <label for="amount" class="d-block">
@@ -36,6 +36,7 @@ export default {
     return {
       pool: false,
       asset: '',
+      address: this.$route.params.address,
       amount: ''
     };
   },

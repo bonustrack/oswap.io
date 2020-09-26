@@ -16,7 +16,11 @@
         </div>
         <div class="text-right mt-4 d-flex">
           <a class="ml-2 p-2 color-gray-6" @click="switchAssets"><Icon name="switch"/></a>
-          <ButtonSelectToken default="base" :not="outputAsset" v-model="inputAsset" />
+          <ButtonSelectToken
+            :default="inputAsset || 'base'"
+            :not="outputAsset"
+            v-model="inputAsset"
+          />
         </div>
       </Box>
       <Box class="d-flex">
@@ -31,7 +35,7 @@
         </div>
         <div class="text-right mt-4 d-flex">
           <a class="ml-2 p-2 color-gray-6" @click="switchAssets"><Icon name="switch"/></a>
-          <ButtonSelectToken :not="inputAsset" v-model="outputAsset" />
+          <ButtonSelectToken :default="outputAsset" :not="inputAsset" v-model="outputAsset" />
         </div>
       </Box>
       <Box v-if="$route.name === 'send'">
@@ -68,7 +72,7 @@
 <script>
 import Trade from '@/helpers/_oswap/trade';
 import Factory from '@/helpers/_oswap/factory';
-import { generateUri, toString } from '@/helpers/_oswap';
+import { getInfo, generateUri, toString } from '@/helpers/_oswap';
 
 export default {
   data() {
@@ -81,6 +85,16 @@ export default {
       to: this.$route.query.to,
       rate: 0
     };
+  },
+  async created() {
+    if (this.$route.params.address) {
+      const info = await getInfo(this.$route.params.address);
+      if (info) {
+        [this.inputAsset, this.outputAsset] = this.$route.query.reverse
+          ? [info.asset1, info.asset0]
+          : [info.asset0, info.asset1];
+      }
+    }
   },
   watch: {
     async inputAsset(value, oldValue) {
@@ -117,9 +131,7 @@ export default {
       this.updateOutputAmount();
     },
     async switchAssets() {
-      const inputAsset = this.inputAsset;
-      this.inputAsset = this.outputAsset;
-      this.outputAsset = inputAsset;
+      [this.inputAsset, this.outputAsset] = [this.outputAsset, this.inputAsset];
       this.outputAmount = '';
       this.inputAmount = '';
       await this.init();

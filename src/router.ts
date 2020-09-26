@@ -16,14 +16,14 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     { path: '/', name: 'home', component: Home },
-    { path: '/swap', name: 'swap', component: Home },
+    { path: '/swap/:address?', name: 'swap', component: Home },
     { path: '/send', name: 'send', component: Home },
-    { path: '/create-pool/:assetB?', name: 'create', component: Create },
+    { path: '/create-pool/*', name: 'create', component: Create },
     { path: '/add-liquidity/:address?', name: 'mint1', component: Mint1 },
     { path: '/add-liquidity-2/:address?', name: 'mint2', component: Mint2 },
     { path: '/remove-liquidity/:address?', name: 'burn', component: Burn },
     { path: '/pools', name: 'pools', component: Pools },
-    { path: '/asset/:id', name: 'asset', component: Asset },
+    { path: '/asset/*', name: 'asset', component: Asset },
     {
       path: '/*',
       name: 'error-404',

@@ -25,13 +25,13 @@
         />
       </span>
       <h1 class="pt-4">
-        <router-link to="/" class="text-white" style="font-size: 64px;">
+        <router-link :to="{ name: 'home' }" class="text-white" style="font-size: 64px;">
           <img src="~/@/assets/logo.svg" class="mt-4" height="64" />
         </router-link>
       </h1>
       <div class="container-sm px-3">
         <div id="nav" class="clearfix bg-gray-9 d-flex rounded-2">
-          <router-link to="/" class="d-block col-4 rounded-2">Swap</router-link>
+          <router-link :to="{ name: 'home' }" class="d-block col-4 rounded-2">Swap</router-link>
           <router-link :to="{ name: 'send' }" class="d-block col-4 rounded-2">Send</router-link>
           <router-link :to="{ name: 'mint1' }" class="d-block col-4 rounded-2">Pool</router-link>
         </div>
