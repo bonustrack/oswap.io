@@ -11,7 +11,7 @@
           <InputAmount id="inputAmount" v-model="inputAmount" />
         </div>
         <div class="text-right mt-4 ml-4">
-          <ButtonSelectPool v-model="pool" />
+          <ButtonSelectPool :default="address" v-model="pool" />
         </div>
       </Box>
       <Box>
@@ -49,6 +49,7 @@ export default {
       pool: null,
       asset: null,
       supply: 0,
+      address: this.$route.params.address,
       asset0: null,
       asset1: null,
       reserve0: 0,

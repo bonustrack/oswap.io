@@ -18,7 +18,9 @@
             />
           </div>
           <div class="text-right mt-4 ml-4">
-            <Ticker class="btn-mktg" :asset="pool.asset0" />
+            <router-link :to="'/asset/' + pool.asset0" class="btn-mktg">
+              <Ticker :asset="pool.asset0" />
+            </router-link>
           </div>
         </Box>
         <Box class="d-flex">
@@ -35,7 +37,9 @@
             />
           </div>
           <div class="text-right mt-4 ml-4">
-            <Ticker class="btn-mktg" :asset="pool.asset1" />
+            <router-link :to="'/asset/' + pool.asset1" class="btn-mktg">
+              <Ticker :asset="pool.asset1" />
+            </router-link>
           </div>
         </Box>
       </template>

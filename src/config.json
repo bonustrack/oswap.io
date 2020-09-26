@@ -5,6 +5,7 @@
     "testnet": true,
     "uri": "obyte-tn",
     "node": "obyte.org/bb-test",
+    "genesisUnit": "TvqutGPz3T4Cs6oiChxFlclY92M2MvCvfXR5/FETato=",
     "factoryAddress": "PFNAFDKV6HKKFIEB2R2ZE4IAPSDNNIGX",
     "baseAddress": "5DNICJLNOBPANH536Y7YVBN5ZDBLQ4LE",
     "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ"
@@ -15,6 +16,7 @@
     "testnet": false,
     "uri": "obyte",
     "node": "obyte.org/bb",
+    "genesisUnit": "oj8yEksX9Ubq7lLc+p6F2uyHUuynugeVq4+ikT67X6E=",
     "factoryAddress": "B22543LKSS35Z55ROU4GDN26RT6MDKWU",
     "baseAddress": "GS23D3GQNNMNJ5TL4Z5PINZ5626WASMA",
     "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ"
