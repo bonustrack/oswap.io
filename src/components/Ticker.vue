@@ -12,7 +12,7 @@ export default {
       const assets = this.settings.assets;
       let ticker = '';
       this.asset.split('_').forEach((asset, i) => {
-        ticker += assets[asset].symbol || shorten(asset);
+        ticker += assets[asset] && assets[asset].symbol ? assets[asset].symbol : shorten(asset);
         if (this.asset.split('_').length === 2 && i === 0) ticker += '-';
       });
       return ticker;

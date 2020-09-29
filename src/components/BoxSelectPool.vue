@@ -1,7 +1,7 @@
 <template>
   <Box>
     <label class="d-block">Pool</label>
-    <ButtonSelectPool customClass="h2 d-block" :default="address" v-model="id" />
+    <ButtonSelectPool customClass="h2 d-block" :default="poolAddress" v-model="id" />
     <PoolInfo :pool="pool" />
   </Box>
 </template>
@@ -10,7 +10,7 @@
 import Pool from '@/helpers/_oswap/pool';
 
 export default {
-  props: ['address'],
+  props: ['poolAddress'],
   data() {
     return {
       id: false,

@@ -65,7 +65,7 @@ export default {
     return {
       assetA: 'base',
       assetB: '',
-      swapFee: '1',
+      swapFee: '0.5',
       symbolA: false,
       symbolB: false,
       decimalsA: 0,
@@ -103,13 +103,19 @@ export default {
     }
   },
   created() {
-    const assetB = this.$route.params[0] || this.$route.params.pathMatch;
+    const assetB = this.$route.params[0] || this.$route.params.pathMatch || '';
     if (assetB) this.assetB = b64UriDec(assetB);
   },
   methods: {
     handleSubmit() {
       const swapFee = parseFloat(this.swapFee) * 1e9;
-      location.href = generateCreateUri([this.assetA, this.assetB], swapFee);
+      const url = generateCreateUri([this.assetA, this.assetB], swapFee);
+      if (navigator.userAgent.indexOf('Firefox') != -1) {
+        const opener = window.open(url);
+        opener.close();
+      } else {
+        location.href = url;
+      }
     }
   }
 };

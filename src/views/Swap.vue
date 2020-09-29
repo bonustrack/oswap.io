@@ -73,10 +73,17 @@
 import Trade from '@/helpers/_oswap/trade';
 import Factory from '@/helpers/_oswap/factory';
 import { getInfo, generateUri, toString } from '@/helpers/_oswap';
+import { b64UriDec } from '@/helpers/utils';
 
 export default {
   data() {
     return {
+      id: b64UriDec(
+        this.$route.params.poolAddress ||
+          this.$route.params[0] ||
+          this.$route.params.pathMatch ||
+          ''
+      ),
       trade: false,
       inputAsset: '',
       outputAsset: '',
@@ -87,9 +94,14 @@ export default {
     };
   },
   async created() {
-    if (this.$route.params.address) {
-      const info = await getInfo(this.$route.params.address);
-      if (info) {
+    if (this.id.length === 44) {
+      this.outputAsset = this.id;
+      [this.inputAsset, this.outputAsset] = this.$route.query.reverse
+        ? [this.outputAsset, 'base']
+        : ['base', this.outputAsset];
+    } else if (this.id) {
+      const info = await getInfo(this.id);
+      if (info && Object.keys(info).length) {
         [this.inputAsset, this.outputAsset] = this.$route.query.reverse
           ? [info.asset1, info.asset0]
           : [info.asset0, info.asset1];
@@ -111,14 +123,16 @@ export default {
     }
   },
   methods: {
+    getDecimals(assetId) {
+      return this.settings.decimals[assetId] || 0;
+    },
     updateRate() {
       if (!this.inputAsset || !this.outputAsset) {
         this.rate = 0;
         return;
       }
-      const { assets } = this.settings;
-      const inputAmount = toString(this.inputAmount, assets[this.inputAsset].decimals);
-      const outputAmount = toString(this.outputAmount, assets[this.outputAsset].decimals);
+      const inputAmount = toString(this.inputAmount, this.getDecimals(this.inputAsset));
+      const outputAmount = toString(this.outputAmount, this.getDecimals(this.outputAsset));
       const rate = parseFloat((inputAmount / outputAmount).toFixed(6));
       if (rate <= 0 || rate === Infinity) {
         this.rate = 0;
@@ -149,7 +163,13 @@ export default {
       const address = route.pools[0].address;
       if (this.to && this.$route.name === 'send') data.to = this.to;
       if (route.pools[1]) data.to_aa = route.pools[1].address;
-      location.href = generateUri(address, data, this.inputAmount, this.inputAsset);
+      const url = generateUri(address, data, this.inputAmount, this.inputAsset);
+      if (navigator.userAgent.indexOf('Firefox') != -1) {
+        const opener = window.open(url);
+        opener.close();
+      } else {
+        location.href = url;
+      }
     },
     updateOutputAmount() {
       if (!this.inputAsset || !this.outputAsset) return;

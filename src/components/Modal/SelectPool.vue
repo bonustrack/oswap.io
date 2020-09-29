@@ -68,8 +68,9 @@ export default {
   },
   methods: {
     selectPool(pool) {
-      this.$emit('pool', pool);
-      this.$emit('close');
+      // this.$emit('pool', pool);
+      // this.$emit('close');
+      this.$router.push({ name: this.$router.name, params: { poolAddress: pool } });
     },
     getBalance
   }
