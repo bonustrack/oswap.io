@@ -16,9 +16,9 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     { path: '/', name: 'home', component: Home },
-    { path: '/swap/:asset_or_pool_address?', name: 'swap', component: Home },
+    { path: '/swap/:pool_address?', name: 'swap', component: Home },
     { path: '/swap/*', name: 'swap-custom', component: Home },
-    { path: '/send/:asset_or_pool_address?', name: 'send', component: Home },
+    { path: '/send/:pool_address?', name: 'send', component: Home },
     { path: '/send/*', name: 'send-custom', component: Home },
     { path: '/create-pool', name: 'create', component: Create },
     { path: '/create-pool/*', name: 'create-custom', component: Create },
