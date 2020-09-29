@@ -14,6 +14,10 @@ $black: #131519;
 
 @import '~@primer/css/index.scss';
 
+html {
+  overflow-y: scroll; // fixes scrollbar twitching
+}
+
 html, body, #app {
   background-color: $black;
 }
