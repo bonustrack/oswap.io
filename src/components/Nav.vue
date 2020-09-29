@@ -31,9 +31,36 @@
       </h1>
       <div class="container-sm px-3">
         <div id="nav" class="clearfix bg-gray-9 d-flex rounded-2">
-          <router-link :to="{ name: 'home' }" class="d-block col-4 rounded-2">Swap</router-link>
-          <router-link :to="{ name: 'send' }" class="d-block col-4 rounded-2">Send</router-link>
-          <router-link :to="{ name: 'mint1' }" class="d-block col-4 rounded-2">Pool</router-link>
+          <router-link
+            :to="{
+              name: this.$route.params.address ? 'swap' : 'home',
+              params: { address: this.$route.params.address },
+              query: this.$route.query
+            }"
+            class="d-block col-4 rounded-2"
+            >Swap</router-link
+          >
+          <router-link
+            :to="{
+              name: 'send',
+              params: { address: this.$route.params.address },
+              query: this.$route.query
+            }"
+            class="d-block col-4 rounded-2"
+            >Send</router-link
+          >
+          <router-link
+            :to="{
+              name:
+                this.$route.params.address && ['mint1', 'mint2', 'burn'].includes(this.$route.name)
+                  ? this.$route.name
+                  : 'pools',
+              params: { address: this.$route.params.address },
+              query: this.$route.query
+            }"
+            class="d-block col-4 rounded-2"
+            >Pools</router-link
+          >
         </div>
       </div>
       <ModalAccount :open="modalAccountOpen" @close="modalAccountOpen = false" />

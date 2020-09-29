@@ -14,6 +14,9 @@
         <label>Decimals</label>
         <p v-text="decimals" class="text-white" />
       </div>
+      <router-link :to="'/create-pool/' + id" class="btn-mktg">
+        Create a pool
+      </router-link>
     </Box>
     <Box v-for="(pool, i) in pools" :key="i">
       <label class="d-block">Pool</label>

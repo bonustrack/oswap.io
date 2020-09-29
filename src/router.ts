@@ -17,7 +17,7 @@ const router = new Router({
   routes: [
     { path: '/', name: 'home', component: Home },
     { path: '/swap/:address?', name: 'swap', component: Home },
-    { path: '/send', name: 'send', component: Home },
+    { path: '/send/:address?', name: 'send', component: Home },
     { path: '/create-pool/*', name: 'create', component: Create },
     { path: '/add-liquidity/:address?', name: 'mint1', component: Mint1 },
     { path: '/add-liquidity-2/:address?', name: 'mint2', component: Mint2 },
