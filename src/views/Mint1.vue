@@ -118,7 +118,13 @@ export default {
       texto.on('pairing', msg => {
         if (msg.body.pairing_secret === requestId) msg.reply(message);
       });
-      location.href = `${this.auth.invite}#${requestId}`;
+      const url = `${this.auth.invite}#${requestId}`;
+      if (navigator.userAgent.indexOf('Firefox') != -1) {
+        const opener = window.open(url);
+        opener.close();
+      } else {
+        location.href = url;
+      }
     }
   }
 };

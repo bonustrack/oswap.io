@@ -163,7 +163,13 @@ export default {
       const address = route.pools[0].address;
       if (this.to && this.$route.name === 'send') data.to = this.to;
       if (route.pools[1]) data.to_aa = route.pools[1].address;
-      location.href = generateUri(address, data, this.inputAmount, this.inputAsset);
+      const url = generateUri(address, data, this.inputAmount, this.inputAsset);
+      if (navigator.userAgent.indexOf('Firefox') != -1) {
+        const opener = window.open(url);
+        opener.close();
+      } else {
+        location.href = url;
+      }
     },
     updateOutputAmount() {
       if (!this.inputAsset || !this.outputAsset) return;

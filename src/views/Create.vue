@@ -109,7 +109,13 @@ export default {
   methods: {
     handleSubmit() {
       const swapFee = parseFloat(this.swapFee) * 1e9;
-      location.href = generateCreateUri([this.assetA, this.assetB], swapFee);
+      const url = generateCreateUri([this.assetA, this.assetB], swapFee);
+      if (navigator.userAgent.indexOf('Firefox') != -1) {
+        const opener = window.open(url);
+        opener.close();
+      } else {
+        location.href = url;
+      }
     }
   }
 };

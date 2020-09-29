@@ -104,7 +104,13 @@ export default {
       this.reserve1 = 0;
     },
     handleSubmit() {
-      location.href = generateUri(this.selectedPool, {}, this.inputAmount, this.asset);
+      const url = generateUri(this.selectedPool, {}, this.inputAmount, this.asset);
+      if (navigator.userAgent.indexOf('Firefox') != -1) {
+        const opener = window.open(url);
+        opener.close();
+      } else {
+        location.href = generateUri(url);
+      }
     }
   }
 };

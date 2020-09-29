@@ -57,7 +57,13 @@ export default {
     handleSubmit() {
       const data = { mint: '1' };
       const address = this.selectedPool.address;
-      location.href = generateUri(address, data, this.amount, this.asset);
+      const url = generateUri(address, data, this.amount, this.asset);
+      if (navigator.userAgent.indexOf('Firefox') != -1) {
+        const opener = window.open(url);
+        opener.close();
+      } else {
+        location.href = url;
+      }
     }
   }
 };
