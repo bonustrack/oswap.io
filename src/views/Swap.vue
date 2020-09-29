@@ -94,8 +94,12 @@ export default {
     };
   },
   async created() {
-    if (this.id.length === 44) this.outputAsset = this.id;
-    else if (this.id) {
+    if (this.id.length === 44) {
+      this.outputAsset = this.id;
+      [this.inputAsset, this.outputAsset] = this.$route.query.reverse
+        ? [this.outputAsset, 'base']
+        : ['base', this.outputAsset];
+    } else if (this.id) {
       const info = await getInfo(this.id);
       if (info && Object.keys(info).length) {
         [this.inputAsset, this.outputAsset] = this.$route.query.reverse
