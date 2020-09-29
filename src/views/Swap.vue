@@ -82,6 +82,7 @@ export default {
       outputAsset: '',
       inputAmount: '',
       outputAmount: '',
+      customId: this.$route.params[0] || this.$route.params.pathMatch,
       to: this.$route.query.to,
       rate: 0
     };
@@ -89,11 +90,11 @@ export default {
   async created() {
     if (this.$route.params.address) {
       const info = await getInfo(this.$route.params.address);
-      if (info) {
-        [this.inputAsset, this.outputAsset] = this.$route.query.reverse
-          ? [info.asset1, info.asset0]
-          : [info.asset0, info.asset1];
+      if (info && this.$route.query.reverse) {
+        [this.inputAsset, this.outputAsset] = [info.asset1, info.asset0];
       }
+    } else if (String(this.customId).length == 44) {
+      this.outputAsset = this.customId;
     }
   },
   watch: {
