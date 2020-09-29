@@ -103,7 +103,7 @@ export default {
     }
   },
   created() {
-    const assetB = this.$route.params[0] || this.$route.params.pathMatch;
+    const assetB = this.$route.params[0] || this.$route.params.pathMatch || '';
     if (assetB) this.assetB = b64UriDec(assetB);
   },
   methods: {

@@ -73,28 +73,35 @@
 import Trade from '@/helpers/_oswap/trade';
 import Factory from '@/helpers/_oswap/factory';
 import { getInfo, generateUri, toString } from '@/helpers/_oswap';
+import { b64UriDec } from '@/helpers/utils';
 
 export default {
   data() {
     return {
+      id: b64UriDec(
+        this.$route.params.asset_or_pool_address ||
+          this.$route.params[0] ||
+          this.$route.params.pathMatch ||
+          ''
+      ),
       trade: false,
       inputAsset: '',
       outputAsset: '',
       inputAmount: '',
       outputAmount: '',
-      customId: this.$route.params[0] || this.$route.params.pathMatch,
       to: this.$route.query.to,
       rate: 0
     };
   },
   async created() {
-    if (this.$route.params.address) {
-      const info = await getInfo(this.$route.params.address);
-      if (info && this.$route.query.reverse) {
-        [this.inputAsset, this.outputAsset] = [info.asset1, info.asset0];
+    if (this.id.length === 44) this.outputAsset = this.id;
+    else if (this.id) {
+      const info = await getInfo(this.id);
+      if (info && Object.keys(info).length) {
+        [this.inputAsset, this.outputAsset] = this.$route.query.reverse
+          ? [info.asset1, info.asset0]
+          : [info.asset0, info.asset1];
       }
-    } else if (String(this.customId).length == 44) {
-      this.outputAsset = this.customId;
     }
   },
   watch: {
@@ -112,14 +119,17 @@ export default {
     }
   },
   methods: {
+    getDecimals(assetId) {
+      return this.settings.decimals[assetId] || 0;
+    },
     updateRate() {
       if (!this.inputAsset || !this.outputAsset) {
         this.rate = 0;
         return;
       }
       const { assets } = this.settings;
-      const inputAmount = toString(this.inputAmount, assets[this.inputAsset].decimals);
-      const outputAmount = toString(this.outputAmount, assets[this.outputAsset].decimals);
+      const inputAmount = toString(this.inputAmount, this.getDecimals(this.inputAsset));
+      const outputAmount = toString(this.outputAmount, this.getDecimals(this.outputAsset));
       const rate = parseFloat((inputAmount / outputAmount).toFixed(6));
       if (rate <= 0 || rate === Infinity) {
         this.rate = 0;

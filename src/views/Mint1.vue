@@ -2,24 +2,24 @@
   <form @submit.prevent="handleSubmit">
     <div class="container-sm px-3">
       <PoolNav />
-      <BoxSelectPool :address="address" v-model="pool" />
-      <template v-if="pool.asset0">
+      <BoxSelectPool :pool_address="pool_address" v-model="selected_pool" />
+      <template v-if="selected_pool.asset0">
         <Box class="d-flex">
           <div class="flex-auto">
             <label for="amount0" class="d-block">
               Deposit
-              <LabelBalance :asset="pool.asset0" @select="setAmount0" />
+              <LabelBalance :asset="selected_pool.asset0" @select="setAmount0" />
             </label>
             <InputAmount
               id="amount0"
               v-model="amount0"
-              :asset="pool.asset0"
+              :asset="selected_pool.asset0"
               @change="updateAmount1"
             />
           </div>
           <div class="text-right mt-4 ml-4">
-            <router-link :to="'/asset/' + pool.asset0" class="btn-mktg">
-              <Ticker :asset="pool.asset0" />
+            <router-link :to="'/asset/' + selected_pool.asset0" class="btn-mktg">
+              <Ticker :asset="selected_pool.asset0" />
             </router-link>
           </div>
         </Box>
@@ -27,24 +27,28 @@
           <div class="flex-auto">
             <label for="amount1" class="d-block">
               Deposit
-              <LabelBalance :asset="pool.asset1" @select="setAmount1" />
+              <LabelBalance :asset="selected_pool.asset1" @select="setAmount1" />
             </label>
             <InputAmount
               id="amount1"
               v-model="amount1"
-              :asset="pool.asset1"
+              :asset="selected_pool.asset1"
               @change="updateAmount0"
             />
           </div>
           <div class="text-right mt-4 ml-4">
-            <router-link :to="'/asset/' + pool.asset1" class="btn-mktg">
-              <Ticker :asset="pool.asset1" />
+            <router-link :to="'/asset/' + selected_pool.asset1" class="btn-mktg">
+              <Ticker :asset="selected_pool.asset1" />
             </router-link>
           </div>
         </Box>
       </template>
       <div class="text-center">
-        <button class="btn-submit px-6 rounded-2 mb-3" type="submit" :disabled="!pool || !amount0">
+        <button
+          class="btn-submit px-6 rounded-2 mb-3"
+          type="submit"
+          :disabled="!selected_pool || !amount0"
+        >
           Add liquidity
         </button>
       </div>
@@ -61,14 +65,14 @@ import { shorten } from '@/helpers/utils';
 export default {
   data() {
     return {
-      pool: false,
+      selected_pool: false,
       amount0: '',
       amount1: '',
-      address: this.$route.params.address
+      pool_address: this.$route.params.pool_address
     };
   },
   watch: {
-    async pool(value, oldValue) {
+    async selected_pool(value, oldValue) {
       if (value !== oldValue) {
         this.amount0 = '';
         this.amount1 = '';
@@ -85,27 +89,29 @@ export default {
       this.updateAmount0();
     },
     updateAmount0() {
-      if (!this.amount1 || !this.pool || !this.pool.hasLiquidity()) return;
-      const k = this.pool.reserve0 / this.pool.reserve1;
+      if (!this.amount1 || !this.selected_pool || !this.selected_pool.hasLiquidity()) return;
+      const k = this.selected_pool.reserve0 / this.selected_pool.reserve1;
       this.amount0 = (k * this.amount1).toFixed();
     },
     updateAmount1() {
-      if (!this.amount0 || !this.pool || !this.pool.hasLiquidity()) return;
-      const k = this.pool.reserve0 / this.pool.reserve1;
+      if (!this.amount0 || !this.selected_pool || !this.selected_pool.hasLiquidity()) return;
+      const k = this.selected_pool.reserve0 / this.selected_pool.reserve1;
       this.amount1 = (this.amount0 / k).toFixed();
     },
     handleSubmit() {
       const assets = this.settings.assets;
-      const address = this.pool.address;
+      const address = this.selected_pool.address;
       const payments = [
-        { address, amount: parseInt(this.amount0), asset: this.pool.asset0 },
-        { address, amount: parseInt(this.amount1), asset: this.pool.asset1 }
+        { address, amount: parseInt(this.amount0), asset: this.selected_pool.asset0 },
+        { address, amount: parseInt(this.amount1), asset: this.selected_pool.asset1 }
       ];
-      if (this.pool.asset0 !== 'base' && this.pool.asset1 !== 'base')
+      if (this.selected_pool.asset0 !== 'base' && this.selected_pool.asset1 !== 'base')
         payments.push({ address, amount: 1e4 });
       const paymentJsonBase64 = generatePaymentMessage({ payments });
-      const asset0Str = assets[this.pool.asset0].symbol || shorten(this.pool.asset0);
-      const asset1Str = assets[this.pool.asset1].symbol || shorten(this.pool.asset1);
+      const asset0Str =
+        assets[this.selected_pool.asset0].symbol || shorten(this.selected_pool.asset0);
+      const asset1Str =
+        assets[this.selected_pool.asset1].symbol || shorten(this.selected_pool.asset1);
       const pool = `${asset0Str}-${asset1Str}`;
       const message = `Add liquidity ${pool}\n[add-liquidity](payment:${paymentJsonBase64})`;
       const requestId = randomBytes(32).toString('base64');

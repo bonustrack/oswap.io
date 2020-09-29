@@ -8,7 +8,7 @@
       <router-link
         v-for="(item, i) in items.filter((item, i) => i !== current)"
         :key="i"
-        :to="{ name: item.to, params: { address: $route.params.address } }"
+        :to="{ name: item.to, params: { pool_address: $route.params.pool_address } }"
         class="d-block"
       >
         <h2 v-text="item.name" class="mt-2" />

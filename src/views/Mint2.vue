@@ -2,8 +2,11 @@
   <form @submit.prevent="handleSubmit">
     <div class="container-sm px-3">
       <PoolNav :default="1" />
-      <BoxSelectPool :address="address" v-model="pool" />
-      <Box v-if="pool.asset0 && pool.reserve0 && pool.reserve1" class="d-flex">
+      <BoxSelectPool :pool_address="pool_address" v-model="selected_pool" />
+      <Box
+        v-if="selected_pool.asset0 && selected_pool.reserve0 && selected_pool.reserve1"
+        class="d-flex"
+      >
         <div class="flex-auto">
           <label for="amount" class="d-block">
             Deposit
@@ -13,8 +16,8 @@
         </div>
         <div class="text-right mt-4 ml-4">
           <ButtonSelectToken
-            :default="pool.asset0"
-            :values="[pool.asset0, pool.asset1]"
+            :default="selected_pool.asset0"
+            :values="[selected_pool.asset0, selected_pool.asset1]"
             v-model="asset"
           />
         </div>
@@ -34,14 +37,14 @@ import { generateUri } from '@/helpers/_oswap';
 export default {
   data() {
     return {
-      pool: false,
+      selected_pool: false,
       asset: '',
-      address: this.$route.params.address,
+      pool_address: this.$route.params.pool_address,
       amount: ''
     };
   },
   watch: {
-    async pool(value, oldValue) {
+    async selected_pool(value, oldValue) {
       if (value !== oldValue) {
         this.amount = '';
       }
@@ -53,7 +56,7 @@ export default {
     },
     handleSubmit() {
       const data = { mint: '1' };
-      const address = this.pool.address;
+      const address = this.selected_pool.address;
       location.href = generateUri(address, data, this.amount, this.asset);
     }
   }

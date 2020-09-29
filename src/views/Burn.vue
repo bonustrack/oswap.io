@@ -11,7 +11,7 @@
           <InputAmount id="inputAmount" v-model="inputAmount" />
         </div>
         <div class="text-right mt-4 ml-4">
-          <ButtonSelectPool :default="address" v-model="pool" />
+          <ButtonSelectPool :default="pool_address" v-model="selected_pool" />
         </div>
       </Box>
       <Box>
@@ -29,7 +29,7 @@
         <button
           class="btn-submit px-6 rounded-2 mb-3"
           type="submit"
-          :disabled="!pool || !inputAmount"
+          :disabled="!selected_pool || !inputAmount"
         >
           Remove liquidity
         </button>
@@ -46,10 +46,10 @@ export default {
   data() {
     return {
       inputAmount: 0,
-      pool: null,
+      selected_pool: null,
       asset: null,
       supply: 0,
-      address: this.$route.params.address,
+      pool_address: this.$route.params.pool_address,
       asset0: null,
       asset1: null,
       reserve0: 0,
@@ -57,7 +57,7 @@ export default {
     };
   },
   watch: {
-    async pool(value, oldValue) {
+    async selected_pool(value, oldValue) {
       if (value && value !== oldValue) {
         this.reset();
         const info = await getInfo(value);
@@ -73,7 +73,7 @@ export default {
   computed: {
     outputAmounts() {
       if (
-        !this.pool ||
+        !this.selected_pool ||
         !this.inputAmount ||
         isNaN(this.inputAmount) ||
         !this.reserve0 ||
@@ -104,7 +104,7 @@ export default {
       this.reserve1 = 0;
     },
     handleSubmit() {
-      location.href = generateUri(this.pool, {}, this.inputAmount, this.asset);
+      location.href = generateUri(this.selected_pool, {}, this.inputAmount, this.asset);
     }
   }
 };
