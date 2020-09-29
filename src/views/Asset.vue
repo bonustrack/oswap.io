@@ -28,7 +28,7 @@
           :href="`https://${config.testnet ? 'testnet.' : ''}tokens.ooo/`"
           class="btn-mktg ml-2"
         >
-          Register token name
+          Register token symbol
         </router-link>
       </div>
     </Box>
