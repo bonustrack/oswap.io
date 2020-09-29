@@ -1,7 +1,7 @@
 <template>
   <div class="container-sm px-3">
     <Box>
-      <h1 v-if="id.length === 44">
+      <h1 v-if="id.length === 44 || id === 'base'">
         <a :href="_explorerLink(id !== 'base' ? id : config.genesisUnit)" target="_blank">
           <span v-if="id !== 'base'">{{ id | shorten }}</span>
           <span v-else><Ticker class="h2" :asset="`${id}`"/></span>
