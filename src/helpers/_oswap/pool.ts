@@ -45,4 +45,29 @@ export default class Pool {
     const outputReserve = outputAsset === this.asset0 ? this.reserve0 : this.reserve1;
     return getAmountSold(outputAmount, outputReserve, inputReserve, this.swapFee);
   }
+
+  assetValue(value, asset) {
+    const decimals = asset ? asset.decimals : 0;
+    return value / 10 ** decimals;
+  }
+
+  getMarketcap(pool, settings) {
+    let assetValue0 = 0;
+    let assetValue1 = 0;
+    if (pool.base) {
+      assetValue0 = assetValue1 = (settings.exchangeRates.GBYTE_USD / 1e9) * pool.base;
+    } else {
+      const assetId0 = pool.asset0 === 'base' ? 'GBYTE' : pool.asset0;
+      const assetId1 = pool.asset1 === 'base' ? 'GBYTE' : pool.asset1;
+      const asset0 = settings.assets[assetId0];
+      const asset1 = settings.assets[assetId1];
+      assetValue0 = settings.exchangeRates[`${assetId0}_USD`]
+        ? settings.exchangeRates[`${assetId0}_USD`] * this.assetValue(pool.reserve0, asset0)
+        : 0;
+      assetValue1 = settings.exchangeRates[`${assetId1}_USD`]
+        ? settings.exchangeRates[`${assetId1}_USD`] * this.assetValue(pool.reserve1, asset1)
+        : 0;
+    }
+    return assetValue0 && assetValue1 ? assetValue0 + assetValue1 : 0;
+  }
 }

@@ -68,36 +68,10 @@ export default {
     await Promise.all(promises);
     this.pools = pools
       .map(pool => {
-        pool.marketcap = this.getMarketcap(pool);
+        pool.marketcap = pool.getMarketcap(pool, this.settings);
         return pool;
       })
       .sort((a, b) => (a.marketcap > b.marketcap ? -1 : 1));
-  },
-  methods: {
-    assetValue(value, assetId) {
-      const asset = this.settings.assets[assetId];
-      const decimals = asset ? asset.decimals : 0;
-      return value / 10 ** decimals;
-    },
-    getMarketcap(pool) {
-      let assetValue0 = 0;
-      let assetValue1 = 0;
-      if (pool.base) {
-        assetValue0 = assetValue1 = (this.settings.exchangeRates.GBYTE_USD / 1e9) * pool.base;
-      } else {
-        const assetId0 = pool.asset0 === 'base' ? 'GBYTE' : pool.asset0;
-        const assetId1 = pool.asset1 === 'base' ? 'GBYTE' : pool.asset1;
-        assetValue0 = this.settings.exchangeRates[`${assetId0}_USD`]
-          ? this.settings.exchangeRates[`${assetId0}_USD`] *
-            this.assetValue(pool.reserve0, pool.asset0)
-          : 0;
-        assetValue1 = this.settings.exchangeRates[`${assetId1}_USD`]
-          ? this.settings.exchangeRates[`${assetId1}_USD`] *
-            this.assetValue(pool.reserve1, pool.asset1)
-          : 0;
-      }
-      return assetValue0 && assetValue1 ? assetValue0 + assetValue1 : 0;
-    }
   },
   computed: {
     symbol() {

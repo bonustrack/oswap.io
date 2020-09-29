@@ -23,6 +23,7 @@ export default {
         const { asset0, asset1 } = this.settings.pools[value];
         const pool = new Pool(value, [asset0, asset1]);
         await pool.init();
+        pool.marketcap = pool.getMarketcap(pool, this.settings);
         this.pool = pool;
         this.$emit('input', pool);
       }
