@@ -51,10 +51,9 @@
           >
           <router-link
             :to="{
-              name:
-                this.$route.params.address && ['mint1', 'mint2', 'burn'].includes(this.$route.name)
-                  ? this.$route.name
-                  : 'pools',
+              name: ['mint1', 'mint2', 'burn'].includes(this.$route.name)
+                ? this.$route.name
+                : 'pools',
               params: { address: this.$route.params.address },
               query: this.$route.query
             }"
