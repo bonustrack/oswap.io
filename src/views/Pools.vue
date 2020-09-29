@@ -3,7 +3,7 @@
     <PoolNav :default="3" />
     <Box v-for="(pool, i) in pools" :key="i">
       <label class="d-block">Pool</label>
-      <router-link class="d-block" :to="{ name: 'mint1', params: { pool_address: pool.address } }">
+      <router-link class="d-block" :to="{ name: 'mint1', params: { poolAddress: pool.address } }">
         <Ticker class="h2" :asset="`${pool.asset0}_${pool.asset1}`" />
       </router-link>
       <PoolInfo :pool="pool" />

@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       id: b64UriDec(
-        this.$route.params.pool_address ||
+        this.$route.params.poolAddress ||
           this.$route.params[0] ||
           this.$route.params.pathMatch ||
           ''

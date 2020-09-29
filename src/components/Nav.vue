@@ -33,8 +33,8 @@
         <div id="nav" class="clearfix bg-gray-9 d-flex rounded-2">
           <router-link
             :to="{
-              name: this.$route.params.pool_address ? 'swap' : 'home',
-              params: { pool_address: this.$route.params.pool_address },
+              name: this.$route.params.poolAddress ? 'swap' : 'home',
+              params: { poolAddress: this.$route.params.poolAddress },
               query: this.$route.query
             }"
             class="d-block col-4 rounded-2"
@@ -43,7 +43,7 @@
           <router-link
             :to="{
               name: 'send',
-              params: { pool_address: this.$route.params.pool_address },
+              params: { poolAddress: this.$route.params.poolAddress },
               query: this.$route.query
             }"
             class="d-block col-4 rounded-2"
@@ -54,7 +54,7 @@
               name: ['mint1', 'mint2', 'burn'].includes(this.$route.name)
                 ? this.$route.name
                 : 'pools',
-              params: { pool_address: this.$route.params.pool_address },
+              params: { poolAddress: this.$route.params.poolAddress },
               query: this.$route.query
             }"
             class="d-block col-4 rounded-2"

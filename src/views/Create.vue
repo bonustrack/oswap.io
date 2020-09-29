@@ -65,7 +65,7 @@ export default {
     return {
       assetA: 'base',
       assetB: '',
-      swapFee: '1',
+      swapFee: '0.5',
       symbolA: false,
       symbolB: false,
       decimalsA: 0,
