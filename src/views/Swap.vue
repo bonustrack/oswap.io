@@ -131,7 +131,6 @@ export default {
         this.rate = 0;
         return;
       }
-      const { assets } = this.settings;
       const inputAmount = toString(this.inputAmount, this.getDecimals(this.inputAsset));
       const outputAmount = toString(this.outputAmount, this.getDecimals(this.outputAsset));
       const rate = parseFloat((inputAmount / outputAmount).toFixed(6));
