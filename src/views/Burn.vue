@@ -111,7 +111,7 @@ export default {
           opener.close();
         }, 5000);
       } else {
-        location.href = generateUri(url);
+        location.href = url;
       }
     }
   }
