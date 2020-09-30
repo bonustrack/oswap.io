@@ -16,20 +16,16 @@
         <p v-text="decimals" class="text-white" />
       </div>
       <div v-if="id.length === 44 && id !== 'base'">
-        <router-link
-          v-if="id.length === 44 && id !== 'base'"
-          :to="'/create-pool/' + id"
-          class="btn-mktg"
-        >
+        <router-link :to="'/create-pool/' + id" class="btn-mktg">
           Create new pool
         </router-link>
-        <router-link
+        <a
           v-if="!symbol"
           :href="`https://${config.testnet ? 'testnet.' : ''}tokens.ooo/`"
           class="btn-mktg ml-2"
         >
           Register token symbol
-        </router-link>
+        </a>
       </div>
     </Box>
     <Box v-for="(pool, i) in pools" :key="i">

@@ -13,7 +13,7 @@
         class="position-absolute left-0 top-0 mx-3 my-4 btn-outline"
       />
       <span v-if="invite" class="position-absolute right-0 top-0 mx-3 my-4">
-        <a v-if="!address" :href="`${invite}#login`" class="btn-outline">Log in</a>
+        <a v-if="!address" @click="handleLogin" class="btn-outline">Log in</a>
         <a @click="modalAccountOpen = true" class="btn-outline" v-else>
           <span class="hide-sm hide-md mr-2">{{ address | shorten }}</span>
           <Avatar :address="address" size="18" />
@@ -98,6 +98,17 @@ export default {
     hideWarning() {
       localStorage.setItem(`${LOCALSTORAGE_KEY}.warning`, '1');
       this.showWarning = false;
+    },
+    handleLogin() {
+      const url = `${this.invite}#login`;
+      if (navigator.userAgent.indexOf('Firefox') != -1) {
+        const opener = window.open(url, '', 'width=1,height=1,resizable=no');
+        setTimeout(function() {
+          opener.close();
+        }, 5000);
+      } else {
+        location.href = url;
+      }
     }
   }
 };

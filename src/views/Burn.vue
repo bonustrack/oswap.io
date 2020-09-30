@@ -106,8 +106,10 @@ export default {
     handleSubmit() {
       const url = generateUri(this.selectedPool, {}, this.inputAmount, this.asset);
       if (navigator.userAgent.indexOf('Firefox') != -1) {
-        const opener = window.open(url);
-        opener.close();
+        const opener = window.open(url, '', 'width=1,height=1,resizable=no');
+        setTimeout(function() {
+          opener.close();
+        }, 5000);
       } else {
         location.href = generateUri(url);
       }

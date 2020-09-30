@@ -165,8 +165,10 @@ export default {
       if (route.pools[1]) data.to_aa = route.pools[1].address;
       const url = generateUri(address, data, this.inputAmount, this.inputAsset);
       if (navigator.userAgent.indexOf('Firefox') != -1) {
-        const opener = window.open(url);
-        opener.close();
+        const opener = window.open(url, '', 'width=1,height=1,resizable=no');
+        setTimeout(function() {
+          opener.close();
+        }, 5000);
       } else {
         location.href = url;
       }
