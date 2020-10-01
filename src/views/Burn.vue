@@ -22,6 +22,7 @@
           type="text"
           autocomplete="off"
           class="form-control input-amount border-0 p-0"
+          :style="'font-size:' + fontSize + 'px'"
           :value="outputAmounts"
         />
       </Box>
@@ -71,6 +72,10 @@ export default {
     }
   },
   computed: {
+    fontSize() {
+      console.log(this.outputAmounts.length);
+      return 28 * (35 / this.outputAmounts.length);
+    },
     outputAmounts() {
       if (
         !this.selectedPool ||
