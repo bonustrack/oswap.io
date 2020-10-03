@@ -104,7 +104,7 @@ export function generateUri(address, data, amount = 1e4, asset?) {
   const json = JSON.stringify(data);
   const b64 = encodeURIComponent(Buffer.from(json).toString('base64'));
   uri += `?base64data=${b64}`;
-  if (amount) uri += `&amount=${amount}`;
+  if (amount) uri += `&amount=${Math.floor(amount)}`;
   if (asset) uri += `&asset=${encodeURIComponent(asset)}`;
   return uri;
 }
