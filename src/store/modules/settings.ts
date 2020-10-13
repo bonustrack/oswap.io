@@ -31,7 +31,7 @@ const mutations = {
     const lSUnit = localStorage.getItem(`${LOCALSTORAGE_KEY}.unit`);
     const assets = { base: lSUnit ? JSON.parse(lSUnit) : units[0] };
     Vue.set(_state, 'assetToSymbol', registry.a2s);
-    const decimals = {};
+    const decimals = { base: assets.base.decimals };
     Object.entries(registry.current).forEach((current: any) => {
       const asset = current[0].replace('desc_', '');
       decimals[asset] = parseInt(registry.decimals[current[1]]) || 0;
@@ -54,6 +54,7 @@ const mutations = {
   },
   unit(_state, payload) {
     Vue.set(_state.assets, 'base', payload);
+    Vue.set(_state.decimals, 'base', payload.decimals);
   },
   exchangeRates(_state, payload) {
     Vue.set(_state, 'exchangeRates', payload);
