@@ -3,7 +3,20 @@
     <div>
       <label class="d-block">Swap fee</label>
       <span class="text-white" v-text="`${pool.swapFee / 1e9}%`" />
-      <label class="d-block">Current pool size</label>
+      <div v-if="pool.hasLiquidity()">
+        <label class="d-block">Prices</label>
+        <div class="text-white">
+          1 <Ticker :asset="pool.asset0" /> ~
+          <Amount :value="pool.getPrice(pool.asset0, this.settings)" :asset="pool.asset1" />
+          &nbsp;<Ticker :asset="pool.asset1" />
+        </div>
+        <div class="text-white">
+          1 <Ticker :asset="pool.asset1" /> ~
+          <Amount :value="pool.getPrice(pool.asset1, this.settings)" :asset="pool.asset0" />
+          &nbsp;<Ticker :asset="pool.asset0" />
+        </div>
+      </div>
+      <label class="d-block">Pool size</label>
       <a :href="_explorerLink(pool.address)" target="_blank">
         <Amount :value="pool.reserve0" :asset="pool.asset0" /> <Ticker :asset="pool.asset0" /> +
         <Amount :value="pool.reserve1" :asset="pool.asset1" /> <Ticker :asset="pool.asset1" />
