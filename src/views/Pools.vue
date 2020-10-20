@@ -34,8 +34,10 @@ export default {
         pool.marketcap = pool.getMarketcap(this.settings);
         return pool;
       })
-      .sort((a, b) => (a.marketcap > b.marketcap ? -1 : 1))
-      .sort((a, b) => (a.hasLiquidity() > b.hasLiquidity() ? -1 : 1));
+      .sort((a, b) => (a.marketcap == b.marketcap ? 0 : a.marketcap > b.marketcap ? -1 : 1))
+      .sort((a, b) =>
+        a.hasLiquidity() == b.hasLiquidity() ? 0 : a.hasLiquidity() > b.hasLiquidity() ? -1 : 1
+      );
   }
 };
 </script>
