@@ -55,6 +55,7 @@
         </p>
         <label for="to">Exchange rate</label>
       </Box>
+      <BoxSelectThreshold v-model="bounceThreshold" />
       <div class="text-center mb-4">
         <button
           class="btn-submit px-6 rounded-2 mb-4"
@@ -89,6 +90,7 @@ export default {
       outputAsset: '',
       inputAmount: '',
       outputAmount: '',
+      bounceThreshold: 1,
       to: this.$route.query.to,
       rate: 0
     };
@@ -159,6 +161,9 @@ export default {
     },
     handleSubmit() {
       const data = {};
+      if (this.bounceThreshold) {
+        data.amount_out_min = Math.round(this.outputAmount * (1 - this.bounceThreshold / 100));
+      }
       const route = this.trade.getRoute(this.inputAmount);
       const address = route.pools[0].address;
       if (this.to && this.$route.name === 'send') data.to = this.to;
