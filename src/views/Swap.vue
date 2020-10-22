@@ -161,7 +161,7 @@ export default {
     },
     handleSubmit() {
       const data = {};
-      if (this.bounceThreshold != 100) {
+      if (this.bounceThreshold < 100) {
         data.amount_out_min = Math.round(this.outputAmount * (1 - this.bounceThreshold / 100));
       }
       const route = this.trade.getRoute(this.inputAmount);
