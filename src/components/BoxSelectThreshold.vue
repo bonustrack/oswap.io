@@ -1,6 +1,6 @@
 <template>
   <Box>
-    <label for="to">Bounce if price has increased</label>
+    <label>Bounce if price has increased</label>
     <div class="d-flex">
       <label class="text-white p-2">
         <input type="radio" id="no" value="0" v-model="bounceThreshold" />
