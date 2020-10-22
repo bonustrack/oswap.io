@@ -161,9 +161,8 @@ export default {
     },
     handleSubmit() {
       const data = {};
-      if (this.bounceThreshold) {
-        data.amount_out_min = Math.round(this.outputAmount * (1 - this.bounceThreshold / 100));
-      }
+      data.amount_out_min = Math.round(this.outputAmount * (1 - this.bounceThreshold / 100));
+      if (!data.amount_out_min) delete data.amount_out_min;
       const route = this.trade.getRoute(this.inputAmount);
       const address = route.pools[0].address;
       if (this.to && this.$route.name === 'send') data.to = this.to;

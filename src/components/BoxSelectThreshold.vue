@@ -1,14 +1,18 @@
 <template>
   <Box>
-    <label>Bounce if price has increased</label>
+    <label>Bounce if the price increases</label>
     <div class="d-flex">
       <label class="text-white p-2">
-        <input type="radio" id="no" value="0" v-model="bounceThreshold" />
-        no
+        <input type="radio" id="any" value="0" v-model="bounceThreshold" />
+        exact prediction
       </label>
       <label v-for="choice in choices" class="text-white p-2" v-bind:key="choice">
         <input type="radio" :id="choice + '%'" :value="choice" v-model="bounceThreshold" />
         {{ choice }}%
+      </label>
+      <label class="text-white p-2">
+        <input type="radio" id="never" value="100" v-model="bounceThreshold" />
+        don't bounce
       </label>
     </div>
   </Box>
@@ -20,7 +24,7 @@ export default {
   data() {
     return {
       bounceThreshold: this.value.toString(),
-      choices: ['1', '5', '10']
+      choices: ['0.1', '1', '5']
     };
   },
   watch: {
