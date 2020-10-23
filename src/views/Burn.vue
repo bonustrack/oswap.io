@@ -73,7 +73,7 @@ export default {
   },
   computed: {
     fontSize() {
-      console.log(this.outputAmounts.length);
+      // console.log(this.outputAmounts.length);
       return 28 * (35 / this.outputAmounts.length);
     },
     outputAmounts() {
@@ -88,7 +88,7 @@ export default {
       const { assets } = this.settings;
       const asset0Str = assets[this.asset0].symbol || shorten(this.asset0);
       const asset1Str = assets[this.asset1].symbol || shorten(this.asset1);
-      const investorShare = this.inputAmount / parseInt(this.supply);
+      const investorShare = this.inputAmount / Math.floor(parseFloat(this.supply));
       const amount0 = Math.floor(investorShare * this.reserve0);
       const minted0 = toString(amount0, assets[this.asset0].decimals);
       const amount1 = Math.floor(investorShare * this.reserve1);

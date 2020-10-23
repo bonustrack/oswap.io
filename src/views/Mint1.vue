@@ -102,8 +102,8 @@ export default {
       const assets = this.settings.assets;
       const address = this.selectedPool.address;
       const payments = [
-        { address, amount: parseInt(this.amount0), asset: this.selectedPool.asset0 },
-        { address, amount: parseInt(this.amount1), asset: this.selectedPool.asset1 }
+        { address, amount: Math.ceil(parseFloat(this.amount0)), asset: this.selectedPool.asset0 },
+        { address, amount: Math.floor(parseFloat(this.amount1)), asset: this.selectedPool.asset1 }
       ];
       if (this.selectedPool.asset0 !== 'base' && this.selectedPool.asset1 !== 'base')
         payments.push({ address, amount: 1e4 });
