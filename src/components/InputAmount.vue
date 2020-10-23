@@ -29,6 +29,9 @@ export default {
       } else {
         this.input = toString(value, this.decimals);
       }
+    },
+    asset(){
+      this.$emit('input', fromString(this.input, this.decimals)); // if asset has changed, we apply the potentially new decimals to amount
     }
   },
   computed: {
