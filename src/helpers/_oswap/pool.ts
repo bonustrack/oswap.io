@@ -20,11 +20,11 @@ export default class Pool {
 
   async init() {
     const info = await getInfo(this.address);
-    this.swapFee = parseInt(info.swap_fee);
+    this.swapFee = Math.floor(parseFloat(info.swap_fee));
     this.asset = info.asset;
-    this.reserve0 = parseInt(info.reserve0);
-    this.reserve1 = parseInt(info.reserve1);
-    this.supply = parseInt(info.supply);
+    this.reserve0 = Math.floor(parseFloat(info.reserve0));
+    this.reserve1 = Math.floor(parseFloat(info.reserve1));
+    this.supply = Math.floor(parseFloat(info.supply));
     if (info.asset0 === 'base') this.base = info.reserve0;
     if (info.asset1 === 'base') this.base = info.reserve1;
     this.ready = true;
