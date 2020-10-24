@@ -18,6 +18,12 @@
           <ButtonSelectToken :values="[selectedPool.asset0, selectedPool.asset1]" v-model="asset" />
         </div>
       </Box>
+      <Box>
+        <p class="text-white m-0">
+          Adding liquidity with just one token is same as swapping a token, and then automatically adding
+          liquidity with both tokens. Use with caution!
+        </p>
+      </Box>
       <div class="text-center">
         <button class="btn-submit px-6 rounded-2 mb-3" type="submit" :disabled="!asset || !amount">
           Add liquidity
