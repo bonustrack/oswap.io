@@ -20,8 +20,8 @@
       </Box>
       <Box>
         <p class="text-white m-0">
-          Adding liquidity with just one token is same as swapping a token, and then automatically adding
-          liquidity with both tokens. Use with caution!
+          Adding liquidity with just one token is same as swapping a token, and then automatically
+          adding liquidity with both tokens. Use with caution!
         </p>
       </Box>
       <div class="text-center">
