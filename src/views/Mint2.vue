@@ -15,11 +15,7 @@
           <InputAmount id="amount" v-model="amount" :asset="asset" />
         </div>
         <div class="text-right mt-4 ml-4">
-          <ButtonSelectToken
-            :default="selectedPool.asset0"
-            :values="[selectedPool.asset0, selectedPool.asset1]"
-            v-model="asset"
-          />
+          <ButtonSelectToken :values="[selectedPool.asset0, selectedPool.asset1]" v-model="asset" />
         </div>
       </Box>
       <div class="text-center">

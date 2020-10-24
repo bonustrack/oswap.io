@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { utils } from 'obyte';
+
 export default {
   props: ['value', 'default', 'customClass'],
   data() {
@@ -19,7 +21,9 @@ export default {
   },
   watch: {
     input(value) {
-      this.$emit('input', value);
+      if (utils.isValidAddress(value)) {
+        this.$emit('input', value);
+      }
     },
     value(value) {
       this.input = value;
@@ -27,8 +31,11 @@ export default {
   },
   computed: {
     ticker() {
-      const pool = this.settings.pools[this.input];
-      return `${pool.asset0}_${pool.asset1}`;
+      if (utils.isValidAddress(this.input)) {
+        const pool = this.settings.pools[this.input];
+        return `${pool.asset0}_${pool.asset1}`;
+      }
+      return 'error';
     }
   },
   mounted() {

@@ -14,7 +14,7 @@
     <div class="modal-body flex-auto mb-5">
       <a
         class="d-block py-2 px-4 text-white highlight d-flex"
-        @click="selectPool(i)"
+        @click="selectPool(pool.address)"
         v-for="(pool, i) in pools"
         :key="i"
       >
@@ -25,7 +25,7 @@
         <Amount
           class="ml-2"
           v-if="balances[pool.asset] && getBalance(balances, pool.asset) > 0"
-          :asset="i"
+          :asset="pool.asset"
           :value="getBalance(balances, pool.asset)"
         />
       </a>
@@ -44,33 +44,55 @@ export default {
   props: ['open', 'not'],
   data() {
     return {
-      query: ''
+      query: '',
+      pools: {},
+      allPools: {}
     };
   },
+  async created() {
+    const pools = [];
+    const promises = [];
+    Object.entries(this.settings.pools).forEach(([address, pool]) => {
+      const p = new Pool(address, [pool.asset0, pool.asset1]);
+      promises.push(p.init());
+      pools.push(p);
+    });
+    await Promise.all(promises);
+    this.allPools = this.pools = pools
+      .map(pool => {
+        pool.marketcap = pool.getMarketcap(this.settings);
+        return pool;
+      })
+      .sort((a, b) => (a.marketcap == b.marketcap ? 0 : a.marketcap > b.marketcap ? -1 : 1))
+      .sort((a, b) =>
+        a.hasLiquidity() == b.hasLiquidity() ? 0 : a.hasLiquidity() > b.hasLiquidity() ? -1 : 1
+      );
+  },
+  watch: {
+    async query(value, oldValue) {
+      if (value !== oldValue) {
+        const assets = this.settings.assets;
+        this.pools = [];
+        Object.entries(this.allPools).forEach(([address, pool]) => {
+          let str = `${assets[pool.asset0].symbol}-${assets[pool.asset1].symbol}`;
+          str += `${pool.asset0}-${pool.asset1}`;
+          if (pool.asset && str.toLowerCase().includes(this.query.toLowerCase())) {
+            this.pools.push(pool);
+          }
+        });
+      }
+    }
+  },
   computed: {
-    pools() {
-      const pools = {};
-      const assets = this.settings.assets;
-      Object.entries(this.settings.pools).forEach(pool => {
-        let str = `${assets[pool[1].asset0].symbol}-${assets[pool[1].asset1].symbol}`;
-        str += `${pool[1].asset0}-${pool[1].asset1}`;
-        if (pool[1].asset && str.toLowerCase().includes(this.query.toLowerCase())) {
-          pools[pool[0]] = new Pool(pool[0], [pool[1].asset0, pool[1].asset1]);
-          pools[pool[0]].asset = pool[1].asset;
-          pools[pool[0]].swapFee = pool[1].swap_fee;
-        }
-      });
-      return pools;
-    },
     balances() {
       return this.auth.balances;
     }
   },
   methods: {
-    selectPool(pool) {
-      // this.$emit('pool', pool);
+    selectPool(poolAddress) {
+      // this.$emit('pool', poolAddress);
       // this.$emit('close');
-      this.$router.push({ name: this.$router.name, params: { poolAddress: pool } });
+      this.$router.push({ name: this.$router.name, params: { poolAddress } });
     },
     getBalance
   }
