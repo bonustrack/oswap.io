@@ -26,6 +26,11 @@
           />
         </div>
       </Box>
+      <Box v-else>
+        <p class="text-white m-0">
+          Adding liquidity with both tokens first.
+        </p>
+      </Box>
       <Box v-if="rate">
         <p class="text-white float-right m-0">
           1 <Ticker :asset="outputAsset" /> = {{ rate }} <Ticker :asset="inputAsset" />
