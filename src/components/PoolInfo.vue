@@ -6,12 +6,12 @@
       <div v-if="pool.hasLiquidity()">
         <label class="d-block">Prices</label>
         <div class="text-white">
-          1 <Ticker :asset="pool.asset0" /> ~
+          1 <Ticker :asset="pool.asset0" /> ≈
           <Amount :value="pool.getPrice(pool.asset0, this.settings)" :asset="pool.asset1" />
           &nbsp;<Ticker :asset="pool.asset1" />
         </div>
         <div class="text-white">
-          1 <Ticker :asset="pool.asset1" /> ~
+          1 <Ticker :asset="pool.asset1" /> ≈
           <Amount :value="pool.getPrice(pool.asset1, this.settings)" :asset="pool.asset0" />
           &nbsp;<Ticker :asset="pool.asset0" />
         </div>

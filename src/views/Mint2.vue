@@ -26,9 +26,9 @@
           />
         </div>
       </Box>
-      <Box v-else>
+      <Box v-else-if="selectedPool">
         <p class="text-white m-0">
-          Adding liquidity with both tokens first.
+          Add liquidity with both tokens first.
         </p>
       </Box>
       <Box v-if="rate">
