@@ -1,10 +1,11 @@
 <template>
   <input
-    type="text"
+    type="number"
     autocomplete="off"
     class="form-control input-amount border-0 p-0"
     v-model="input"
     @keyup="handleChange"
+    :step="1 / 10 ** this.decimals"
     :placeholder="placeholder"
   />
 </template>

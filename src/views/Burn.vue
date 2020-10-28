@@ -74,7 +74,7 @@ export default {
   computed: {
     fontSize() {
       // console.log(this.outputAmounts.length);
-      return 28 * (35 / this.outputAmounts.length);
+      return 28 * (34 / this.outputAmounts.length);
     },
     outputAmounts() {
       if (

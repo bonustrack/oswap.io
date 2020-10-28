@@ -39,10 +39,10 @@
           id="swapFee"
           class="form-control input-amount border-0 p-0"
           autocomplete="off"
-          placeholder="0.000000000"
+          placeholder="0.0000"
           v-model="swapFee"
           type="number"
-          step="0.000000001"
+          step="0.0001"
           min="0.0001"
           max="10"
         />
