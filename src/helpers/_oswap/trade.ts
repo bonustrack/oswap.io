@@ -46,7 +46,9 @@ export default class Trade {
     this.routes.forEach((route, i) => {
       // @ts-ignore
       const inputAmount = route.getAmountSold(outputAmount, this.outputAsset);
-      if (!minAmount || (inputAmount < minAmount && inputAmount > 0)) minAmount = inputAmount;
+      if (inputAmount > 0) {
+        if (!minAmount || inputAmount < minAmount) minAmount = inputAmount;
+      }
     });
     return minAmount;
   }
