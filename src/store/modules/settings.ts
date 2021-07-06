@@ -1,7 +1,12 @@
 import Vue from 'vue';
 import store from '@/store';
 import client from '@/helpers/client';
-import { getAAState, FACTORY_ADDRESS, TOKEN_REGISTRY_ADDRESS } from '@/helpers/_oswap';
+import {
+  getAAState,
+  getAAStateVars,
+  FACTORY_ADDRESS,
+  TOKEN_REGISTRY_ADDRESS
+} from '@/helpers/_oswap';
 import { LOCALSTORAGE_KEY } from '@/helpers/utils';
 import units from '@/helpers/units.json';
 
@@ -27,14 +32,14 @@ const mutations = {
   isLoading(_state, payload) {
     Vue.set(_state, 'isLoading', payload);
   },
-  init(_state, { factory, registry }) {
+  init(_state, { factory, a2sRegistry, descriptionRegistry, decimalsRegistry }) {
     const lSUnit = localStorage.getItem(`${LOCALSTORAGE_KEY}.unit`);
     const assets = { base: lSUnit ? JSON.parse(lSUnit) : units[0] };
-    Vue.set(_state, 'assetToSymbol', registry.a2s);
+    Vue.set(_state, 'assetToSymbol', a2sRegistry.a2s);
     const decimals = { base: assets.base.decimals };
-    Object.entries(registry.current).forEach((current: any) => {
+    Object.entries(descriptionRegistry.current).forEach((current: any) => {
       const asset = current[0].replace('desc_', '');
-      decimals[asset] = parseInt(registry.decimals[current[1]]) || 0;
+      decimals[asset] = parseInt(decimalsRegistry.decimals[current[1]]) || 0;
     });
     Vue.set(_state, 'decimals', decimals);
     if (factory.pools) {
@@ -45,7 +50,7 @@ const mutations = {
         if (pool[1].asset) {
           [pool[1].asset0, pool[1].asset1].forEach(asset => {
             if (asset !== 'base')
-              assets[asset] = { symbol: registry.a2s[asset], decimals: decimals[asset] || 0 };
+              assets[asset] = { symbol: a2sRegistry.a2s[asset], decimals: decimals[asset] || 0 };
           });
         }
       });
@@ -67,8 +72,10 @@ const actions = {
     const address = localStorage.getItem(`${LOCALSTORAGE_KEY}.address`);
     if (address) store.dispatch('login', address);
     const factory = await getAAState(FACTORY_ADDRESS);
-    const registry = await getAAState(TOKEN_REGISTRY_ADDRESS, '_');
-    commit('init', { factory, registry });
+    const a2sRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'a2s_', '_');
+    const descriptionRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'current_desc_', '_');
+    const decimalsRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'decimals_', '_');
+    commit('init', { factory, a2sRegistry, descriptionRegistry, decimalsRegistry });
     commit('isLoading', false);
   },
   unit: ({ commit }, unit) => {

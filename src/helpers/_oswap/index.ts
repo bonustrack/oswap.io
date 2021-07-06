@@ -66,6 +66,11 @@ export async function getAAState(address: string, delimiter?: string) {
   return parseAAState(state, delimiter);
 }
 
+export async function getAAStateVars(address: string, var_prefix: string, delimiter?: string) {
+  const state = await client.requestAsync('light/get_aa_state_vars', { address, var_prefix });
+  return parseAAState(state, delimiter);
+}
+
 export function parseAAState(obj, delimiter = '.'): any {
   const state = {};
   Object.entries(obj).forEach(v => set(state, v[0].replace(delimiter, '.'), v[1]));

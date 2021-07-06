@@ -24,7 +24,7 @@
         </div>
         <Amount
           class="ml-2"
-          v-if="balances[pool.asset] && getBalance(balances, pool.asset) > 0"
+          v-if="balances && balances[pool.asset] && getBalance(balances, pool.asset) > 0"
           :asset="pool.asset"
           :value="getBalance(balances, pool.asset)"
         />

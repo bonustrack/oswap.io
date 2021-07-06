@@ -21,7 +21,7 @@
         <Ticker :asset="i" />
         <Amount
           class="float-right"
-          v-if="balances[i] && getBalance(balances, i) > 0"
+          v-if="balances && balances[i] && getBalance(balances, i) > 0"
           :asset="i"
           :value="getBalance(balances, i)"
         />
