@@ -1,5 +1,5 @@
 <template>
-  <span v-text="$n(str)" />
+  <span v-text="str" />
 </template>
 
 <script>

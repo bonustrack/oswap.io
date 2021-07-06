@@ -32,10 +32,17 @@
         </p>
       </Box>
       <Box v-if="rate">
-        <p class="text-white float-right m-0">
-          1 <Ticker :asset="outputAsset" /> = {{ rate }} <Ticker :asset="inputAsset" />
-        </p>
-        <label for="to">Exchange rate</label>
+        <label for="input">Exchange rate</label>
+        <div class="text-white">
+          1 <Ticker :asset="outputAsset" /> =
+          {{ parseFloat(rate.toFixed(this.getDecimals(inputAsset))) }}
+          <Ticker :asset="inputAsset" />
+        </div>
+        <div class="text-white">
+          1 <Ticker :asset="inputAsset" /> =
+          {{ parseFloat((1 / rate).toFixed(this.getDecimals(outputAsset))) }}
+          <Ticker :asset="outputAsset" />
+        </div>
       </Box>
       <Box v-if="rate">
         <p class="text-white m-0">

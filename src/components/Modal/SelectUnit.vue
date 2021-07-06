@@ -10,7 +10,7 @@
       >
         {{ unit.symbol }}
         <span class="float-right text-gray" v-if="exchangeRates">
-          1 {{ unit.symbol }} ≈ ${{ getRate(unit.decimals).toFixed(4) }}
+          1 {{ unit.symbol }} ≈ ${{ getRate(unit.decimals) }}
         </span>
       </a>
     </div>
@@ -39,7 +39,9 @@ export default {
     },
     getRate(decimals) {
       const multiplier = 10 ** decimals;
-      return (multiplier * this.exchangeRates.GBYTE_USD) / 1e9;
+      return ((multiplier * this.exchangeRates.GBYTE_USD) / 1e9).toLocaleString('en-US', {
+        maximumSignificantDigits: 3
+      });
     }
   }
 };
