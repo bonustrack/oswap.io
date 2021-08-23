@@ -48,7 +48,7 @@
         <p class="text-white m-0">
           Adding liquidity with just one token is basically the same as swapping half of the tokens,
           and then automatically adding liquidity with both tokens.<br />
-          There is no slippage threshold when depositting only one token at once, so use with
+          There is no slippage threshold when depositing only one token at once, so use with
           caution!
         </p>
       </Box>
