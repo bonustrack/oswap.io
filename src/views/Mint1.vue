@@ -100,10 +100,24 @@ export default {
     },
     handleSubmit() {
       const assets = this.settings.assets;
-      const address = this.selectedPool.address;
+      const address =
+        !this.selectedPool.reserve0 || !this.selectedPool.reserve1 // check if pool has ratio
+          ? this.selectedPool.address
+          : this.settings.poolToProxy[this.selectedPool.address] || this.selectedPool.address;
+      let amount0 = this.amount0;
+      let amount1 = this.amount1;
+      // add 2000 extra bytes when via proxy
+      if (address !== this.selectedPool.address) {
+        if (this.selectedPool.asset0 === 'base') {
+          amount0 += 2e3;
+        }
+        if (this.selectedPool.asset1 === 'base') {
+          amount1 += 2e3;
+        }
+      }
       const payments = [
-        { address, amount: Math.ceil(parseFloat(this.amount0)), asset: this.selectedPool.asset0 },
-        { address, amount: Math.floor(parseFloat(this.amount1)), asset: this.selectedPool.asset1 }
+        { address, amount: Math.floor(parseFloat(amount0)), asset: this.selectedPool.asset0 },
+        { address, amount: Math.floor(parseFloat(amount1)), asset: this.selectedPool.asset1 }
       ];
       if (this.selectedPool.asset0 !== 'base' && this.selectedPool.asset1 !== 'base')
         payments.push({ address, amount: 1e4 });
@@ -112,7 +126,9 @@ export default {
         assets[this.selectedPool.asset0].symbol || shorten(this.selectedPool.asset0);
       const asset1Str =
         assets[this.selectedPool.asset1].symbol || shorten(this.selectedPool.asset1);
-      const pool = `${asset0Str}-${asset1Str}`;
+      const pool =
+        `${asset0Str}-${asset1Str}` +
+        (address !== this.selectedPool.address ? ' via proxy AA' : '');
       const message = `Add liquidity ${pool}\n[add-liquidity](payment:${paymentJsonBase64})`;
       const requestId = randomBytes(32).toString('base64');
       texto.on('pairing', msg => {

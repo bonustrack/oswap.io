@@ -40,18 +40,18 @@
           <Icon name="external-link" class="ml-1" size="18" />
         </a>
       </p>
-      <p v-for="(item, i) in { factory, pool, registry }" :key="i">
+      <p v-for="(item, i) in { factory, pool, proxies, registry }" :key="i">
         <label :for="i" class="d-block" v-text="item.name" />
-        <a
-          :id="i"
-          :href="_explorerLink(item.address)"
-          target="_blank"
-          class="d-block py-2 text-white"
-        >
-          <Avatar :address="item.address" size="18" class="mr-1" />
-          {{ item.address }}
-          <Icon name="external-link" class="ml-1" size="18" />
-        </a>
+        <span v-for="(address, j) in item.addresses" :key="j">
+          <a :id="i" :href="_explorerLink(address)" target="_blank" class="d-block py-2 text-white">
+            <Avatar :address="address" size="18" class="mr-1" />
+            {{ address }}
+            <Icon name="external-link" class="ml-1" size="18" />
+          </a>
+        </span>
+        <span v-if="!item.addresses.length">
+          No addresses
+        </span>
       </p>
     </div>
   </Modal>
@@ -59,7 +59,12 @@
 
 <script>
 import pkg from '@/../package.json';
-import { FACTORY_ADDRESS, BASE_ADDRESS, TOKEN_REGISTRY_ADDRESS } from '@/helpers/_oswap';
+import {
+  FACTORY_ADDRESS,
+  BASE_ADDRESS,
+  PROXY_BASE_ADDRESSES,
+  TOKEN_REGISTRY_ADDRESS
+} from '@/helpers/_oswap';
 import config from '@/helpers/config';
 
 export default {
@@ -67,9 +72,10 @@ export default {
   data() {
     return {
       pkg,
-      factory: { name: 'Factory address', address: FACTORY_ADDRESS },
-      pool: { name: 'Pool base address', address: BASE_ADDRESS },
-      registry: { name: 'Registry address', address: TOKEN_REGISTRY_ADDRESS },
+      factory: { name: 'Factory address', addresses: [FACTORY_ADDRESS] },
+      pool: { name: 'Pool base address', addresses: [BASE_ADDRESS] },
+      proxies: { name: 'Proxy base address(es)', addresses: PROXY_BASE_ADDRESSES },
+      registry: { name: 'Registry address', addresses: [TOKEN_REGISTRY_ADDRESS] },
       config
     };
   }

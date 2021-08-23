@@ -1,12 +1,13 @@
 import { set } from 'lodash';
 import { createHash } from 'crypto';
-import Decimal from 'decimal.js';
 import { utils } from 'obyte';
+import Decimal from 'decimal.js';
 import client from '@/helpers/client';
 import config from '@/helpers/config';
 
 export const FACTORY_ADDRESS = config.factoryAddress;
 export const BASE_ADDRESS = config.baseAddress;
+export const PROXY_BASE_ADDRESSES = config.proxyBaseAddresses;
 export const TOKEN_REGISTRY_ADDRESS = config.tokenRegistryAddress;
 
 Decimal.set({
@@ -69,6 +70,16 @@ export async function getAAState(address: string, delimiter?: string) {
 export async function getAAStateVars(address: string, var_prefix: string, delimiter?: string) {
   const state = await client.requestAsync('light/get_aa_state_vars', { address, var_prefix });
   return parseAAState(state, delimiter);
+}
+
+export async function getAAsByBaseAAs(aa: string | string[], aaParams?: object) {
+  let params = { params: aaParams };
+  if (typeof aa === 'string') {
+    params['base_aa'] = aa;
+  } else {
+    params['base_aas'] = aa;
+  }
+  return await client.requestAsync('light/get_aas_by_base_aas', params);
 }
 
 export function parseAAState(obj, delimiter = '.'): any {

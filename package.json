@@ -1,6 +1,6 @@
 {
   "name": "oswap",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Obyte exchange protocol",
   "scripts": {
     "serve": "vue-cli-service serve",

@@ -4,7 +4,9 @@ import client from '@/helpers/client';
 import {
   getAAState,
   getAAStateVars,
+  getAAsByBaseAAs,
   FACTORY_ADDRESS,
+  PROXY_BASE_ADDRESSES,
   TOKEN_REGISTRY_ADDRESS
 } from '@/helpers/_oswap';
 import { LOCALSTORAGE_KEY } from '@/helpers/utils';
@@ -18,6 +20,7 @@ const state = {
   exchangeRates: {},
   pools: {},
   pairs: {},
+  poolToProxy: {},
   count: 0
 };
 
@@ -32,7 +35,7 @@ const mutations = {
   isLoading(_state, payload) {
     Vue.set(_state, 'isLoading', payload);
   },
-  init(_state, { factory, a2sRegistry, descriptionRegistry, decimalsRegistry }) {
+  init(_state, { factory, proxies, a2sRegistry, descriptionRegistry, decimalsRegistry }) {
     const lSUnit = localStorage.getItem(`${LOCALSTORAGE_KEY}.unit`);
     const assets = { base: lSUnit ? JSON.parse(lSUnit) : units[0] };
     Vue.set(_state, 'assetToSymbol', a2sRegistry.a2s);
@@ -56,6 +59,13 @@ const mutations = {
       });
     }
     Vue.set(_state, 'assets', assets);
+    let poolToProxy = {};
+    Object.entries(proxies).forEach((proxy: any) => {
+      if (proxy[1].definition[1].params.pool_aa) {
+        poolToProxy[proxy[1].definition[1].params.pool_aa] = proxy[1].address;
+      }
+    });
+    Vue.set(_state, 'poolToProxy', poolToProxy);
   },
   unit(_state, payload) {
     Vue.set(_state.assets, 'base', payload);
@@ -72,10 +82,14 @@ const actions = {
     const address = localStorage.getItem(`${LOCALSTORAGE_KEY}.address`);
     if (address) store.dispatch('login', address);
     const factory = await getAAState(FACTORY_ADDRESS);
+    const proxies =
+      PROXY_BASE_ADDRESSES && PROXY_BASE_ADDRESSES.length
+        ? await getAAsByBaseAAs(PROXY_BASE_ADDRESSES)
+        : [];
     const a2sRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'a2s_', '_');
     const descriptionRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'current_desc_', '_');
     const decimalsRegistry = await getAAStateVars(TOKEN_REGISTRY_ADDRESS, 'decimals_', '_');
-    commit('init', { factory, a2sRegistry, descriptionRegistry, decimalsRegistry });
+    commit('init', { factory, proxies, a2sRegistry, descriptionRegistry, decimalsRegistry });
     commit('isLoading', false);
   },
   unit: ({ commit }, unit) => {
