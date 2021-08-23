@@ -20,7 +20,7 @@
     "genesisUnit": "oj8yEksX9Ubq7lLc+p6F2uyHUuynugeVq4+ikT67X6E=",
     "factoryAddress": "B22543LKSS35Z55ROU4GDN26RT6MDKWU",
     "baseAddress": "GS23D3GQNNMNJ5TL4Z5PINZ5626WASMA",
-    "proxyBaseAddresses": [],
+    "proxyBaseAddresses": ["GHZL7TY2KJOIJK3K2OQWH6F45Q6JMLVY"],
     "tokenRegistryAddress": "O6H6ZIFI57X3PLTYHOCVYPP5A553CYFQ"
   }
 }
