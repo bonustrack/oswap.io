@@ -25,7 +25,7 @@
     "ethereum-blockies-base64": "^1.0.2",
     "express": "^4.17.1",
     "frameguard": "^3.1.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "kbyte": "0.0.6",
     "lodash": "^4.17.19",
     "obyte": "^0.1.7",
